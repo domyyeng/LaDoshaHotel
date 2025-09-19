@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- ===================== META ===================== -->
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Chips (one plate) — La Dosha Hotel</title>
+
+  <!-- ===================== STYLES ===================== -->
+  <link rel="stylesheet" href="../css/style.css"/>
+</head>
+<body>
+
+  <!-- ===================== HEADER ===================== -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <!-- Logo -->
+      <div class="logo">
+        <a href="../index.html">
+          <img src="../assets/images/ladoshalogo.png"
+               alt="La Dosha Hotel Logo"
+               style="height:50px; width:auto; vertical-align:middle;" />
+        </a>
+      </div>
+
+      <!-- Navigation -->
+      <nav class="main-nav">
+        <a href="../index.html">Home</a>
+        <a href="../menu.html">Menu</a>
+        <a href="../explore.html">Explore</a>
+        <a href="../about.html">About</a>
+        <a href="../destinations.html">Destinations</a>
+        <a href="../cart.html">Cart (<span id="cart-count">0</span>)</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===================== MAIN CONTENT ===================== -->
+  <main class="container">
+    <a href="../menu.html" class="btn">← Back to Menu</a>
+    <h1>Chips (one plate)</h1>
+
+    <div class="card" style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap">
+      <!-- Fixed image path -->
+      <img 
+        src="../assets/images/meal_chips.jpg" 
+        alt="Chips (one plate)" 
+        style="width:360px;max-width:100%;border-radius:12px"
+      />
+
+      <div style="flex:1">
+        <p class="meal-detail">Crispy golden chips, lightly salted.</p>
+        <p><strong>Category:</strong> Snacks</p>
+        <p><strong>Price:</strong> KES 100</p>
+        <p><strong>Estimated prep time:</strong> 8 minutes (fast-food)</p>
+
+        <h3>Customize Your Order</h3>
+        <form id="order-form">
+          <!-- Quantity -->
+          <label>How many people? 
+            <input type="number" id="people" min="1" value="1"/>
+          </label><br/><br/>
+
+          <!-- Location (select or custom) -->
+          <label>
+            Choose a location
+            <select id="location-select">
+              <option value="">-- Select a location --</option>
+              <option>Kinamba Shopping Centre</option>
+              <option>Dea's Gardens</option>
+              <option>Finlays Horticulture Kenya Ltd</option>
+              <option>Loldia Ltd</option>
+              <option>DCK Centre</option>
+              <option>Moi South Lake Road Businesses</option>
+              <option>Naivasha Town Centre</option>
+              <option>Enashipai Resort & Spa</option>
+              <option>Delamere Estates</option>
+              <option>Matteo's Italian Restaurant & Bar</option>
+              <option>Benart Gallery</option>
+              <option>Panda Sacco Ltd</option>
+            </select>
+          </label><br/><br/>
+
+          <label>
+            Or write your location
+            <input type="text" id="custom-location" placeholder="Enter your exact location"/>
+          </label><br/><br/>
+
+          <!-- Delivery or Pickup -->
+          <label>
+            How would you like it? <br/>
+            <input type="radio" name="delivery-type" value="Delivery" checked/> Delivery
+            <input type="radio" name="delivery-type" value="Pickup"/> Pickup (Collect at hotel)
+          </label><br/><br/>
+
+          <!-- Special instructions -->
+          <label>
+            Special instructions 
+            <input type="text" id="note" placeholder="E.g., less spice, no onions"/>
+          </label><br/><br/>
+
+          <!-- Offer code -->
+          <label>
+            Offer code (optional) 
+            <input type="text" id="offer" placeholder="e.g., LADOSHA10"/>
+          </label><br/><br/>
+
+          <!-- Add to cart button -->
+          <button type="button" class="btn primary" id="add-cart">Add to Cart</button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="footer"><div class="container">&copy; 2025 La Dosha Hotel</div></footer>
+
+  <!-- ===================== SCRIPTS ===================== -->
+  <script src="../js/cart.js"></script>
+  <script>
+    document.getElementById('add-cart').addEventListener('click', function(e) {
+      e.preventDefault();
+
+      const people = Number(document.getElementById('people').value) || 1;
+      const presetLocation = document.getElementById('location-select').value;
+      const customLocation = document.getElementById('custom-location').value.trim();
+      const location = customLocation || presetLocation || "Not specified";
+
+      const note = document.getElementById('note').value || '';
+      const offer = document.getElementById('offer').value || '';
+      const deliveryType = document.querySelector('input[name="delivery-type"]:checked')?.value || 'Delivery';
+
+      const meal = {
+        id: 1,
+        name: 'Chips (one plate)',
+        price: 100,
+        qty: people,
+        note: note,
+        location: location,
+        deliveryType: deliveryType,
+        offer: offer,
+        img: '../assets/images/meal_chips.jpg'
+      };
+
+      // Save to cart
+      if (typeof addToCart === 'function') {
+        addToCart(meal.id, meal.name, meal.price, meal.qty, meal);
+      } else {
+        const key = 'ladosha_cart_v2';
+        const cart = JSON.parse(localStorage.getItem(key) || '[]');
+        cart.push(meal);
+        localStorage.setItem(key, JSON.stringify(cart));
+      }
+
+      alert('Meal added to cart with your preferences');
+    });
+  </script>
+</body>
+</html>

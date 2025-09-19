@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Cart — La Dosha Hotel</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    /* --- Cart Page Styling --- */
+    .cart-container { margin-top:20px; }
+    .cart-item {
+      display:flex; align-items:flex-start;
+      gap:16px; padding:16px; margin-bottom:16px;
+      border:1px solid #ddd; border-radius:12px;
+      background:#fff;
+      box-shadow:0 2px 5px rgba(0,0,0,0.05);
+    }
+    .cart-item img {
+      width:120px; height:100px; object-fit:cover; border-radius:8px;
+    }
+    .cart-details { flex:1; }
+    .cart-details h3 { margin:0; font-size:1.2em; color:#222; }
+    .cart-meta { font-size:0.9em; color:#555; margin-top:4px; }
+    .cart-price { font-weight:bold; margin-top:6px; }
+    .cart-remove {
+      background:#ff4d4d; color:#fff; border:none;
+      padding:6px 10px; border-radius:6px; cursor:pointer;
+    }
+    .cart-summary {
+      margin-top:20px; padding:16px; border:1px solid #ccc; border-radius:12px;
+      background:#fafafa;
+    }
+    .cart-summary h2 { margin-top:0; }
+    .checkout-actions { margin-top:20px; text-align:right; }
+    .btn { padding:10px 18px; border:none; border-radius:8px; cursor:pointer; }
+    .btn.primary { background:#ff8800; color:#fff; font-weight:bold; }
+    .btn.alt { background:#444; color:#fff; }
+  </style>
+</head>
+<body>
+
+  <!-- ================= HEADER ================= -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <!-- Logo -->
+      <div class="logo">
+        <a href="index.html">
+          <img src="assets/images/ladoshalogo.png"
+               alt="La Dosha Hotel Logo"
+               style="height:50px; width:auto; vertical-align:middle;" />
+        </a>
+      </div>
+
+      <!-- Navigation -->
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="menu.html">Menu</a>
+        <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ================= MAIN ================= -->
+  <main class="container cart-container">
+    <h1>Your Cart</h1>
+    <div id="cart-contents"></div>
+    <div id="cart-summary" class="cart-summary"></div>
+
+    <!-- Payment Options -->
+    <div style="margin-top:20px;">
+      <h3>Choose Payment Method:</h3>
+      <label><input type="radio" name="payment" value="online" checked/> Pay Online</label><br/>
+      <label><input type="radio" name="payment" value="delivery"/> Pay on Delivery</label>
+    </div>
+
+    <!-- Checkout Actions -->
+    <div class="checkout-actions">
+      <button class="btn primary" id="checkout-btn" style="display:none">Checkout</button>
+      <button class="btn alt" id="order-btn" style="display:none">Order Now</button>
+    </div>
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="footer">
+    <div class="container">&copy; 2025 La Dosha Hotel</div>
+  </footer>
+
+  <!-- ================= SCRIPT ================= -->
+  <script>
+    const key = 'ladosha_cart_v3';
+    const cart = JSON.parse(localStorage.getItem(key) || '[]');
+    const cartContainer = document.getElementById('cart-contents');
+    const cartSummary = document.getElementById('cart-summary');
+
+    function renderCart() {
+      cartContainer.innerHTML = '';
+      let subtotal = 0;
+
+      if(cart.length === 0) {
+        cartContainer.innerHTML = '<p>Your cart is empty.</p>';
+        cartSummary.innerHTML = '';
+        return;
+      }
+
+      cart.forEach((item, idx) => {
+        subtotal += item.price * item.qty;
+        const el = document.createElement('div');
+        el.className = 'cart-item';
+        el.innerHTML = `
+          <img src="${item.img || 'assets/images/meal_placeholder.png'}" alt="${item.name}">
+          <div class="cart-details">
+            <h3>${item.name}</h3>
+            <div class="cart-meta">
+              Qty: ${item.qty}<br/>
+              Location: ${item.location || '-'}<br/>
+              Note: ${item.note || '-'}<br/>
+              Delivery: ${item.delivery || 'Pickup'}
+            </div>
+            <div class="cart-price">KES ${item.price * item.qty}</div>
+          </div>
+          <button class="cart-remove" onclick="removeFromCart(${idx})">Remove</button>
+        `;
+        cartContainer.appendChild(el);
+      });
+
+      cartSummary.innerHTML = `
+        <h2>Order Summary</h2>
+        <p><strong>Subtotal:</strong> KES ${subtotal}</p>
+        <p><strong>Grand Total:</strong> KES ${subtotal}</p>
+      `;
+
+      document.getElementById('cart-count').textContent = cart.length;
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index,1);
+      localStorage.setItem(key, JSON.stringify(cart));
+      renderCart();
+    }
+
+    // --- Payment toggle ---
+    const checkoutBtn = document.getElementById('checkout-btn');
+    const orderBtn = document.getElementById('order-btn');
+    document.querySelectorAll('input[name="payment"]').forEach(radio => {
+      radio.addEventListener('change', e => {
+        if(e.target.value === 'online') {
+          checkoutBtn.style.display = 'inline-block';
+          orderBtn.style.display = 'none';
+        } else {
+          checkoutBtn.style.display = 'none';
+          orderBtn.style.display = 'inline-block';
+        }
+      });
+    });
+
+    // --- Actions ---
+    checkoutBtn.addEventListener('click', () => {
+      alert('Redirecting to payment gateway...');
+      // Here you’d integrate online payment
+    });
+
+    orderBtn.addEventListener('click', () => {
+      let orderText = "Order details:\\n";
+      cart.forEach(c => {
+        orderText += `${c.name} x${c.qty} — KES ${c.price * c.qty}\\nLocation: ${c.location || '-'}\\nNote: ${c.note || '-'}\\nDelivery: ${c.delivery || 'Pickup'}\\n\\n`;
+      });
+      window.location.href = 'mailto:ladoshahotel@gmail.com?subject=New Order&body=' + encodeURIComponent(orderText);
+    });
+
+    renderCart();
+  </script>
+</body>
+</html>

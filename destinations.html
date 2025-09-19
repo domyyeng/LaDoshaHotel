@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Destination — La Dosha Hotel</title>
+  <link rel="stylesheet" href="css/style.css"/>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <style>
+    /* Map container */
+    #map {
+      height: 420px;
+      border-radius: 8px;
+      margin-top: 12px;
+    }
+  </style>
+</head>
+<body>
+  <!-- ================= HEADER ================= -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="logo">
+        <a href="index.html">
+          <img
+            src="assets/images/ladoshalogo.png"
+            alt="La Dosha Hotel Logo"
+            style="height:50px; width:auto; vertical-align:middle;"
+          />
+        </a>        
+      </div>
+
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="menu.html">Menu</a>
+        <a href="explore.html">Explore</a>
+        <a href="about.html">About</a>
+        <a href="destinations.html">Destination</a>
+        <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ================= MAIN CONTENT ================= -->
+  <main class="container">
+    <h1>Find Us — Kinamba, Naivasha</h1>
+    <p>
+      La Dosha Hotel is located in the heart of Kinamba, Naivasha.  
+      Use the map below to find us easily and explore nearby businesses.
+    </p>
+
+    <!-- Map container -->
+    <div id="map"></div>
+
+    <!-- Nearby Places -->
+    <section style="margin-top:20px;">
+      <h2>Nearby Places</h2>
+      <ul>
+        <li>Kinamba Shopping Centre</li>
+        <li>Dea's Gardens</li>
+        <li>Finlays Horticulture</li>
+        <li>Naivasha Town Services</li>
+      </ul>
+    </section>
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="footer">
+    <div class="container">&copy; 2025 La Dosha Hotel — Kinamba, Naivasha</div>
+  </footer>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    // ✅ Approx coordinates from your Google Maps link (Kinamba, Naivasha)
+    const hotelCoords = [-0.7172, 36.4310];
+
+    // Initialize map
+    const map = L.map('map').setView(hotelCoords, 16);
+
+    // Add tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Add marker for La Dosha Hotel
+    L.marker(hotelCoords)
+      .addTo(map)
+      .bindPopup('<b>La Dosha Hotel</b><br>Kinamba, Naivasha')
+      .openPopup();
+  </script>
+</body>
+</html>

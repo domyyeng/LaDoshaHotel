@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- ================= META ================= -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>La Dosha Hotel</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+  <!-- ================= HEADER ================= -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <!-- Logo -->
+      <div class="logo">
+        <a href="index.html">
+          <img src="assets/images/ladoshalogo.png"
+               alt="La Dosha Hotel Logo"
+               style="height:50px; width:auto; vertical-align:middle;" />
+        </a>
+      </div>
+
+      <!-- Navigation -->
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="menu.html">Menu</a>
+        <a href="explore.html">Explore</a>
+        <a href="about.html">About</a>
+        <a href="destinations.html">Destination</a>
+        <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ================= MAIN ================= -->
+  <main class="container">
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="left">
+        <div class="animated-bullet">Now Serving • Kinamba, Naivasha</div>
+
+        <h1 class="hype">La Dosha Hotel</h1>
+
+        <div style="margin-top:8px; color:#444;">
+          Opened August 2025 • Ten-seater boutique hotel
+        </div>
+
+        <!-- CTA Buttons -->
+        <div style="margin-top:12px;">
+          <button class="btn primary" onclick="location.href='menu.html'">Order Now</button>
+          <button class="btn" onclick="location.href='explore.html'">Explore Our Meals</button>
+        </div>
+
+        <!-- Meal of the Day (clickable link & animates on click) -->
+        <!-- href will be set dynamically from JS (so it matches your meals array) -->
+        <div style="margin-top:12px;">
+          <a href="#" id="meal-of-day-badge" class="badge" role="button" aria-label="Open Meal of the Day">Meal of the Day</a>
+          <span class="animated-sub">Delicious</span>
+        </div>
+
+        <!-- Contact -->
+        <div style="margin-top:12px; color:#666;">
+          Email: <a href="mailto:ladoshahotel@gmail.com">ladoshahotel@gmail.com</a>
+          • Phone: 0715665770
+        </div>
+      </div>
+
+      <!-- Right Side Image (clickable, points to Meal of the Day) -->
+      <div class="right">
+        <div class="card plate-3d fancy-3d">
+          <a href="#" id="meal-of-day-image-link" aria-label="Open Meal of the Day">
+            <img id="meal-of-day-image"
+                 src="assets/images/meal_of_the_day.png"
+                 class="img godmode"
+                 alt="Meal of the Day"
+                 style="height:280px; border-radius:12px;" />
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Explore Meals -->
+    <section style="margin-top:20px;">
+      <h2>Explore Our Meals</h2>
+      <div class="menu-grid" id="home-meals"></div>
+    </section>
+
+    <!-- Gallery -->
+    <section style="margin-top:20px;">
+      <h2>Gallery</h2>
+      <div class="gallery">
+        <img src="assets/images/gallery1.jpg" alt="Chips" onclick="openLightbox(this.src)" />
+        <img src="assets/images/gallery2.jpg" alt="Restaurant inside" onclick="openLightbox(this.src)" />
+        <img src="assets/images/hotel_front.png" alt="Hotel front" onclick="openLightbox(this.src)" />
+        <img src="assets/images/3d_plate.png" alt="Meal 3D" onclick="openLightbox(this.src)" />
+      </div>
+    </section>
+
+    <!-- Clients Feedback -->
+    <section style="margin-top:20px;">
+      <h2>Clients Feedback</h2>
+      <div class="cards">
+        <div class="card">
+          <strong>Jane K.</strong>
+          <p>"Warm atmosphere, delicious chips masala. Cozy ten-seater gem in Kinamba."</p>
+        </div>
+
+        <div class="card">
+          <strong>Mark O.</strong>
+          <p>"Quick delivery and friendly staff."</p>
+        </div>
+
+        <div class="card">
+          <strong>Lillian M.</strong>
+          <p>"Futuristic presentation and great taste."</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="footer">
+    <div class="container">&copy; 2025 La Dosha Hotel — Kinamba, Naivasha</div>
+  </footer>
+
+  <!-- ================= SCRIPTS ================= -->
+  <script src="js/cart.js"></script>
+  <script src="js/main.js"></script>
+
+  <script>
+    /* ============================
+       Meals dataset (with links)
+       Update image filenames if your files differ
+       ============================ */
+    const meals = [
+      { id: 1, name: 'Chips (one plate)', price: 100, img: 'assets/images/meal_chips.jpg', link: 'meals/meal-1.html' },
+      { id: 2, name: 'Chips Masala (one plate)', price: 130, img: 'assets/images/meal_chips_masala.jpg', link: 'meals/meal-2.html' },
+      { id: 3, name: 'Signature Roast', price: 450, img: 'assets/images/meal_chips.jpg', link: 'meals/meal-3.html' },
+      { id: 4, name: 'Fresh Juice', price: 180, img: 'assets/images/meal_of_the_day.png', link: 'meals/meal-4.html' }
+    ];
+
+    /* ============================
+       Configure Meal of the Day
+       (choose the id you want to highlight)
+       ============================ */
+    const mealOfDayId = 4; // change to whichever meal id is "meal of the day"
+    const mealOfDay = meals.find(m => m.id === mealOfDayId) || meals[0];
+    const badge = document.getElementById('meal-of-day-badge');
+    const imgLink = document.getElementById('meal-of-day-image-link');
+    const imgEl = document.getElementById('meal-of-day-image');
+
+    // assign proper hrefs so they match the meals array
+    if (badge) badge.setAttribute('href', mealOfDay.link);
+    if (imgLink) imgLink.setAttribute('href', mealOfDay.link);
+    if (imgEl && mealOfDay.img) imgEl.src = mealOfDay.img;
+
+    // animate & navigate helper using the Web Animations API
+    function animateThenNavigate(el, url) {
+      if (!el) { location.href = url; return; }
+      try {
+        const animation = el.animate(
+          [
+            { transform: 'scale(1)' },
+            { transform: 'scale(1.06)' },
+            { transform: 'scale(1)' }
+          ],
+          { duration: 500, easing: 'cubic-bezier(.2,.9,.2,1)' }
+        );
+        // navigate when animation finishes
+        animation.finished.then(() => { location.href = url; }).catch(() => { location.href = url; });
+      } catch {
+        // fallback
+        location.href = url;
+      }
+    }
+
+    // Intercept clicks to animate then navigate
+    badge && badge.addEventListener('click', function (e) {
+      // allow middle-click / ctrl-click to open in new tab
+      if (e.metaKey || e.ctrlKey || e.button === 1) return;
+      e.preventDefault();
+      animateThenNavigate(badge, badge.href);
+    });
+
+    imgLink && imgLink.addEventListener('click', function (e) {
+      if (e.metaKey || e.ctrlKey || e.button === 1) return;
+      e.preventDefault();
+      // animate the image element for visual feedback
+      animateThenNavigate(imgEl, imgLink.href);
+    });
+
+    /* ============================
+       Render clickable meal cards
+       (each card is an <a> that opens the meal page)
+       ============================ */
+    const grid = document.getElementById('home-meals');
+
+    meals.forEach(m => {
+      const a = document.createElement('a');
+      a.href = m.link;
+      a.className = 'menu-item card';
+      a.style.textDecoration = 'none';
+      a.style.color = 'inherit';
+      a.innerHTML = `
+        <img src="${m.img}" class="img godmode" alt="${m.name}" />
+        <h4>${m.name}</h4>
+        <div class="price">KES ${m.price}</div>
+      `;
+      grid.appendChild(a);
+    });
+  </script>
+</body>
+</html>
