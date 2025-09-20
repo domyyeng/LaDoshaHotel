@@ -13,11 +13,27 @@ const getCart = () => {
   }
 };
 
+/* ---------- Save & Update ---------- */
 const saveCart = (cart) => {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
   renderCart();
   updateCounts();
+  updateMobileTotal();
 };
+
+/* ---------- Toast Notifications ---------- */
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  if (!toast) return;
+  
+  toast.textContent = msg;
+  toast.classList.add('show');
+
+  // Hide after 2.5s
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 2500);
+}
 
 /* ---------- Cart Operations ---------- */
 const addToCart = (id, name, price, qty = 1, opts = {}) => {
@@ -47,7 +63,7 @@ const addToCart = (id, name, price, qty = 1, opts = {}) => {
   }
 
   saveCart(cart);
-  alert(`Added ${name} to cart`);
+  showToast(`✅ ${name} added to cart`);
 };
 
 const changeQty = (i, q) => {
@@ -67,6 +83,7 @@ const clearCart = () => {
   localStorage.removeItem(STORAGE_KEY);
   renderCart();
   updateCounts();
+  updateMobileTotal();
 };
 
 /* ---------- UI Rendering ---------- */
@@ -79,6 +96,7 @@ const renderCart = () => {
   if (cart.length === 0) {
     area.innerHTML = '<p>Your cart is empty.</p>';
     summary.innerHTML = '';
+    updateMobileTotal();
     return;
   }
 
@@ -108,6 +126,8 @@ const renderCart = () => {
       <button class="btn" onclick="clearCart()">Clear</button>
     </p>
   `;
+
+  updateMobileTotal();
 };
 
 /* ---------- Totals & Counts ---------- */
@@ -124,8 +144,15 @@ const updateCounts = () => {
 
 const getCartItems = () => getCart();
 
+/* ---------- Mobile Sticky Total ---------- */
+const updateMobileTotal = () => {
+  const el = document.getElementById('mobile-total');
+  if (el) el.textContent = "KES " + getCartTotal();
+};
+
 /* ---------- Init ---------- */
 document.addEventListener('DOMContentLoaded', () => {
   renderCart();
   updateCounts();
+  updateMobileTotal();
 });

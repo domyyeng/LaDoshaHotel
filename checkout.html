@@ -5,158 +5,314 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Checkout — La Dosha Hotel</title>
   <link rel="stylesheet" href="css/style.css"/>
+
   <style>
-    .form-group { margin-bottom: 15px; }
-    .order-summary { margin: 20px 0; border: 1px solid #ddd; padding: 15px; border-radius: 8px; }
-    .order-item { display: flex; align-items: center; margin-bottom: 10px; }
-    .order-item img { width: 60px; height: 60px; object-fit: cover; margin-right: 10px; border-radius: 6px; }
-    .btn { padding: 10px 18px; border: none; border-radius: 6px; cursor: pointer; }
-    .btn.primary { background: #ff8800; color: #fff; }
-    .btn.secondary { background: #444; color: #fff; }
-    .logo img { height: 40px; vertical-align: middle; }
+    h1 {
+      text-align: center;
+      margin: 20px 0 30px;
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--brand);
+    }
+    .order-summary {
+      margin: 20px 0;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: var(--shadow-sm);
+      padding: 20px;
+    }
+    .order-summary h3 { margin-bottom: 16px; font-size: 20px; font-weight: 700; }
+    .order-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 14px;
+      border-bottom: 1px solid #f3f3f3;
+      padding-bottom: 10px;
+    }
+    .order-item img {
+      width: 64px; height: 64px;
+      object-fit: cover;
+      margin-right: 12px;
+      border-radius: 8px;
+    }
+    .order-item strong { display: block; margin-bottom: 4px; }
+    .checkout-form {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .form-group { margin-bottom: 16px; }
+    label { font-weight: 600; display: block; margin-bottom: 6px; }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+    .payment-options label {
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    #checkout-result .card {
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: 12px;
+      background: #fdfcf8;
+      box-shadow: var(--shadow-md);
+    }
+    .btn.primary {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      border-radius: 10px;
+      text-align: center;
+      cursor: pointer;
+    }
+    .btn.secondary {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 10px 16px;
+      background: #ddd;
+      border-radius: 8px;
+      text-decoration: none;
+      color: #000;
+    }
   </style>
 </head>
 <body>
+  <!-- ================= HEADER ================= -->
 <header class="site-header">
   <div class="container header-inner">
+    <!-- Logo -->
     <div class="logo">
-      <img src="assets/images/ladoshalogo.png" alt="La Dosha Hotel Logo"/> 
-      La Dosha Hotel
+      <a href="index.html">
+        <img src="assets/images/ladoshalogo.png"
+             alt="La Dosha Hotel Logo"
+             style="height:50px; width:auto; vertical-align:middle;" />
+      </a>
     </div>
-    <nav class="main-nav">
+
+    <!-- Mobile menu toggle (hamburger) -->
+    <button class="menu-toggle" aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <!-- Navigation -->
+    <nav class="main-nav" id="navMenu">
       <a href="index.html">Home</a>
       <a href="menu.html">Menu</a>
-      <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
+      <a href="explore.html">Explore</a>
+      <a href="about.html">About</a>
+      <a href="destinations.html">Destination</a>
     </nav>
   </div>
 </header>
 
-<main class="container">
-  <h1>Checkout</h1>
-
-  <!-- Order Summary -->
-  <div id="order-summary" class="order-summary"></div>
-
-  <!-- Checkout Form -->
-  <form id="checkout-form">
-    <div class="form-group">
-      <label>Full Name<br/>
-        <input required type="text" id="cust-name"/>
-      </label>
-    </div>
-    <div class="form-group">
-      <label>Phone Number<br/>
-        <input required type="tel" id="cust-phone"/>
-      </label>
-    </div>
-    <div class="form-group">
-      <label>Delivery Location<br/>
-        <select id="cust-location" class="location-select" required>
-          <option value="">-- Select Location --</option>
-          <option>Kinamba, Naivasha</option>
-          <option>Naivasha Town</option>
-          <option>Moi South Lake Road</option>
-        </select>
-      </label>
-    </div>
-    <div class="form-group">
-      <label>How many people?<br/>
-        <input type="number" id="cust-people" min="1" value="1" class="people-select"/>
-      </label>
-    </div>
-
-    <h3>Payment Method</h3>
-    <div class="form-group">
-      <label><input type="radio" name="payment" value="cod" checked/> Cash on Delivery</label><br/>
-      <label><input type="radio" name="payment" value="mpesa"/> M-Pesa (Demo)</label><br/>
-      <label><input type="radio" name="payment" value="card"/> Card (Demo)</label>
-    </div>
-
-    <button id="checkout-btn" class="btn primary" type="submit">Order Now</button>
-  </form>
-
-  <div id="checkout-result" style="margin-top:20px"></div>
-</main>
-
-<footer class="footer">
-  <div class="container">&copy; 2025 La Dosha Hotel</div>
-</footer>
-
-<script src="js/cart.js"></script>
 <script>
-  const summaryDiv = document.getElementById('order-summary');
-  const checkoutBtn = document.getElementById('checkout-btn');
+  const menuToggle = document.querySelector('.menu-toggle');
+  const navMenu = document.getElementById('navMenu');
 
-  // Show order summary with images
-  function renderSummary() {
-    const items = getCartItems();
-    if (items.length === 0) {
-      summaryDiv.innerHTML = "<p>Your cart is empty.</p>";
-      return;
-    }
-    let html = "<h3>Your Order</h3>";
-    items.forEach(item => {
-      html += `
-        <div class="order-item">
-          <img src="${item.img}" alt="${item.name}"/>
-          <div>
-            <strong>${item.name}</strong><br/>
-            Qty: ${item.qty} × KES ${item.price} = <strong>KES ${item.qty * item.price}</strong>
-          </div>
-        </div>`;
-    });
-    html += `<p><strong>Total: KES ${getCartTotal()}</strong></p>`;
-    summaryDiv.innerHTML = html;
-  }
-  renderSummary();
-  updateCounts();
-
-  // Change button text based on payment type
-  document.querySelectorAll('input[name="payment"]').forEach(radio => {
-    radio.addEventListener('change', () => {
-      if (radio.value === "cod") {
-        checkoutBtn.textContent = "Order Now";
-      } else {
-        checkoutBtn.textContent = "Checkout & Pay";
-      }
-    });
-  });
-
-  // Handle checkout
-  document.getElementById('checkout-form').addEventListener('submit', function(e){
-    e.preventDefault();
-
-    const name = document.getElementById('cust-name').value.trim();
-    const phone = document.getElementById('cust-phone').value.trim();
-    const location = document.getElementById('cust-location').value;
-    const people = Number(document.getElementById('cust-people').value) || 1;
-    const payment = document.querySelector('input[name="payment"]:checked').value;
-
-    if (!name || !phone || !location) {
-      alert("Please fill in all required fields.");
-      return;
-    }
-
-    const order = {
-      customer: { name, phone, location, people },
-      payment,
-      items: getCartItems(),
-      total: getCartTotal()
-    };
-
-    document.getElementById('checkout-result').innerHTML = `
-      <div class="card">
-        <h3>Thank you, ${order.customer.name}!</h3>
-        <p>Your order total is <strong>KES ${order.total}</strong>.</p>
-        <p>Payment Method: <strong>${payment.toUpperCase()}</strong></p>
-        <p>We will contact you at <strong>${phone}</strong> for delivery to <strong>${location}</strong>.</p>
-      </div>
-    `;
-
-    clearCart();
-    renderSummary();
-    updateCounts();
+  menuToggle.addEventListener('click', () => {
+    navMenu.classList.toggle('active');
   });
 </script>
+
+
+  <main class="container">
+    <h1>Checkout</h1>
+    <div id="order-summary" class="order-summary"></div>
+
+    <form id="checkout-form" class="checkout-form">
+      <div class="form-group">
+        <label>Full Name</label>
+        <input required type="text" id="cust-name"/>
+      </div>
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input required type="tel" id="cust-phone"/>
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input required type="email" id="cust-email"/>
+      </div>
+      <div class="form-group">
+        <label>Delivery Location</label>
+        <select id="cust-location" required onchange="toggleCustomLocation(this)">
+          <option value="">-- Select Location --</option>
+          <option>SAMCOM PROPERTIES AGENCY</option>
+          <option>WESTRN STEELMART</option>
+          <option>Pema Electronics</option>
+          <option>Beulah Hotel</option>
+          <option>Rawhew Ranch</option>
+          <option>Kinamba Centre</option>
+          <option>A.I.C. Kinamba (church)</option>
+          <option value="other">Other (Specify)</option>
+        </select>
+        <input type="text" id="custom-location" placeholder="Enter your location" style="display:none;margin-top:8px;"/>
+      </div>
+      <div class="form-group">
+        <label>How many people?</label>
+        <input type="number" id="cust-people" min="1" value="1"/>
+      </div>
+      <h3>Payment Method</h3>
+      <div class="form-group payment-options">
+        <label><input type="radio" name="payment" value="cod" checked/> Cash on Delivery</label>
+        <label><input type="radio" name="payment" value="mpesa"/> Pochi La Biashara</label>
+        <label><input type="radio" name="payment" value="card"/> Card (Demo)</label>
+      </div>
+      <button id="checkout-btn" class="btn primary" type="submit">Order Now</button>
+    </form>
+
+    <div id="checkout-result"></div>
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+<footer class="footer">
+  <div class="footer-top">
+    <div class="container footer-grid">
+      
+      <!-- About -->
+      <div class="footer-col">
+        <h4>La Dosha Hotel</h4>
+        <p>La Dosha Hotel brings you a fine dining experience with online ordering, 
+          fast delivery, and luxury hospitality. Our goal is to make every meal memorable.</p>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="menu.html">Menu</a></li>
+          <li><a href="explore.html">Explore</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="destinations.html">Destinations</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+
+      <!-- Customer Service -->
+      <div class="footer-col">
+        <h4>Customer Service</h4>
+        <ul>
+          <li><a href="destinations.html">Destination</a></li>
+          <li><a href="cart.html">How to Order</a></li>
+          <li><a href="checkout.html">Payment Options</a></li>
+          <li><a href="index.html">Terms & Conditions</a></li>
+          <li><a href="index.html">Privacy Policy</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact -->
+      <div class="footer-col">
+        <h4>Get in Touch</h4>
+        <p><strong>Phone:</strong> +254 715 665 770</p>
+        <p><strong>Email:</strong> ladoshahotel@gmail.com</p>
+        <div class="social-links">
+          <a href="https://www.facebook.com/ladoshahotel/"><img src="assets/icons/facebook.png" alt="Facebook"></a>
+          <a href="#"><img src="assets/icons/instagram.png" alt="Instagram"></a>
+          <a href="#"><img src="assets/icons/x.png" alt="X"></a>
+          <a href="#"><img src="assets/icons/youtube.png" alt="YouTube"></a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  
+  <div class="footer-bottom">
+    <div class="container">
+      <p>&copy; 2025 La Dosha Hotel. All Rights Reserved.</p>
+    </div>
+  </div>
+</footer>
+
+  <script src="js/cart.js"></script>
+  <script>
+    const summaryDiv = document.getElementById('order-summary');
+    const checkoutBtn = document.getElementById('checkout-btn');
+
+    function toggleCustomLocation(select) {
+      const customInput = document.getElementById('custom-location');
+      if (select.value === "other") {
+        customInput.style.display = "block";
+        customInput.required = true;
+      } else {
+        customInput.style.display = "none";
+        customInput.required = false;
+        customInput.value = "";
+      }
+    }
+
+    function renderSummary() {
+      const items = getCartItems();
+      if (items.length === 0) {
+        summaryDiv.innerHTML = "<p>Your cart is empty.</p>";
+        return;
+      }
+      let html = "<h3>Your Order</h3>";
+      items.forEach(item => {
+        html += `
+          <div class="order-item">
+            <img src="${item.img}" alt="${item.name}"/>
+            <div>
+              <strong>${item.name}</strong>
+              Qty: ${item.qty} × KES ${item.price}<br/>
+              <strong>KES ${item.qty * item.price}</strong>
+            </div>
+          </div>`;
+      });
+      html += `<p><strong>Total: KES ${getCartTotal()}</strong></p>`;
+      summaryDiv.innerHTML = html;
+    }
+    renderSummary();
+    updateCounts();
+
+    document.querySelectorAll('input[name="payment"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        checkoutBtn.textContent = radio.value === "cod" ? "Order Now" : "Checkout & Pay";
+      });
+    });
+
+    document.getElementById('checkout-form').addEventListener('submit', function(e){
+      e.preventDefault();
+      const name = document.getElementById('cust-name').value.trim();
+      const phone = document.getElementById('cust-phone').value.trim();
+      const email = document.getElementById('cust-email').value.trim();
+      let location = document.getElementById('cust-location').value;
+      if(location === "other") {
+        location = document.getElementById('custom-location').value.trim();
+      }
+      const people = Number(document.getElementById('cust-people').value) || 1;
+      const payment = document.querySelector('input[name="payment"]:checked').value;
+
+      if (!name || !phone || !location) {
+        alert("Please fill in all required fields.");
+        return;
+      }
+
+      const order = { customer: { name, phone, email, location, people }, payment, items: getCartItems(), total: getCartTotal() };
+
+      document.getElementById('checkout-result').innerHTML = `
+        <div class="card">
+          <h3>🎉 Thank you, ${order.customer.name}!</h3>
+          <p>Your order total is <strong>KES ${order.total}</strong>.</p>
+          <p>Payment Method: <strong>${payment.toUpperCase()}</strong></p>
+          <p>We’ll contact you at <strong>${phone}</strong> to deliver to <strong>${location}</strong>.</p>
+          <a href="index.html" class="btn secondary">Go Home</a>
+        </div>
+      `;
+
+      clearCart();
+      renderSummary();
+      updateCounts();
+    });
+  </script>
 </body>
 </html>

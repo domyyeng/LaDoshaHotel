@@ -1,173 +1,252 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Cart — La Dosha Hotel</title>
-  <link rel="stylesheet" href="css/style.css"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Your Cart — La Dosha Hotel</title>
+  <link rel="stylesheet" href="css/style.css" />
   <style>
-    /* --- Cart Page Styling --- */
-    .cart-container { margin-top:20px; }
-    .cart-item {
-      display:flex; align-items:flex-start;
-      gap:16px; padding:16px; margin-bottom:16px;
-      border:1px solid #ddd; border-radius:12px;
-      background:#fff;
-      box-shadow:0 2px 5px rgba(0,0,0,0.05);
+    .cart-page {
+      margin: 30px auto;
+      max-width: 900px;
     }
-    .cart-item img {
-      width:120px; height:100px; object-fit:cover; border-radius:8px;
+    .cart-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #eee;
     }
-    .cart-details { flex:1; }
-    .cart-details h3 { margin:0; font-size:1.2em; color:#222; }
-    .cart-meta { font-size:0.9em; color:#555; margin-top:4px; }
-    .cart-price { font-weight:bold; margin-top:6px; }
-    .cart-remove {
-      background:#ff4d4d; color:#fff; border:none;
-      padding:6px 10px; border-radius:6px; cursor:pointer;
+    .cart-row img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
     }
     .cart-summary {
-      margin-top:20px; padding:16px; border:1px solid #ccc; border-radius:12px;
-      background:#fafafa;
+      margin-top: 20px;
+      padding: 20px;
+      border-top: 2px solid #ddd;
+      background: #fafafa;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: flex-end;
     }
-    .cart-summary h2 { margin-top:0; }
-    .checkout-actions { margin-top:20px; text-align:right; }
-    .btn { padding:10px 18px; border:none; border-radius:8px; cursor:pointer; }
-    .btn.primary { background:#ff8800; color:#fff; font-weight:bold; }
-    .btn.alt { background:#444; color:#fff; }
+    .cart-summary strong {
+      font-size: 18px;
+      color: #333;
+    }
+    .cart-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .btn {
+      padding: 10px 18px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+    }
+    .btn.primary {
+      background: #ff8800;
+      color: #fff;
+      font-weight: 600;
+    }
+    .btn.primary:hover { background: #e67600; }
+    .btn.secondary {
+      background: #f0f0f0;
+      color: #333;
+    }
+    .btn.secondary:hover { background: #ddd; }
+
+    /* Sticky checkout bar for mobile */
+    .checkout-bar {
+      display: none;
+    }
+    @media (max-width: 768px) {
+      .checkout-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #fff;
+        padding: 12px 20px;
+        border-top: 2px solid #ddd;
+        box-shadow: 0 -4px 8px rgba(0,0,0,0.05);
+        z-index: 1000;
+      }
+      .checkout-bar strong {
+        font-size: 16px;
+      }
+    }
+
+    /* Header & mobile menu */
+    .menu-toggle { display: none; flex-direction: column; gap: 4px; border: none; background: none; cursor: pointer; }
+    .menu-toggle span { display: block; width: 25px; height: 3px; background: #000; border-radius: 2px; }
+    .main-nav { display: flex; gap: 15px; }
+    @media (max-width: 768px) {
+      .menu-toggle { display: flex; }
+      .main-nav {
+        display: none;
+        flex-direction: column;
+        background: #fff;
+        position: absolute;
+        top: 60px;
+        right: 20px;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      }
+      .main-nav.active { display: flex; }
+      .main-nav a { padding: 8px 0; }
+    }
   </style>
 </head>
 <body>
 
-  <!-- ================= HEADER ================= -->
-  <header class="site-header">
-    <div class="container header-inner">
-      <!-- Logo -->
-      <div class="logo">
-        <a href="index.html">
-          <img src="assets/images/ladoshalogo.png"
-               alt="La Dosha Hotel Logo"
-               style="height:50px; width:auto; vertical-align:middle;" />
-        </a>
+<!-- ================= HEADER ================= -->
+<header class="site-header">
+  <div class="container header-inner">
+    <!-- Logo -->
+    <div class="logo">
+      <a href="index.html">
+        <img src="assets/images/ladoshalogo.png"
+             alt="La Dosha Hotel Logo"
+             style="height:50px; width:auto; vertical-align:middle;" />
+      </a>
+    </div>
+    <!-- Mobile menu toggle -->
+    <button class="menu-toggle" aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <!-- Navigation -->
+    <nav class="main-nav" id="navMenu">
+      <a href="index.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="explore.html">Explore</a>
+      <a href="about.html">About</a>
+      <a href="destinations.html">Destination</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ================= MAIN CONTENT ================= -->
+<main class="container cart-page">
+  <p>Review your selected meals below. You can adjust quantities, remove items, or proceed to checkout.</p>
+
+  <!-- Cart Contents -->
+  <div id="cart-contents"></div>
+
+  <!-- Cart Summary -->
+  <div id="cart-summary" class="cart-summary"></div>
+</main>
+
+<!-- Sticky Checkout Bar (mobile) -->
+<div class="checkout-bar">
+  <strong>Total: <span id="mobile-total">KES 0</span></strong>
+  <a class="btn primary" href="checkout.html">Checkout</a>
+</div>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+  <div class="footer-top">
+    <div class="container footer-grid">
+      
+      <!-- About -->
+      <div class="footer-col">
+        <h4>La Dosha Hotel</h4>
+        <p>La Dosha Hotel brings you a fine dining experience with online ordering, 
+          fast delivery, and luxury hospitality. Our goal is to make every meal memorable.</p>
       </div>
 
-      <!-- Navigation -->
-      <nav class="main-nav">
-        <a href="index.html">Home</a>
-        <a href="menu.html">Menu</a>
-        <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
-      </nav>
+      <!-- Quick Links -->
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="menu.html">Menu</a></li>
+          <li><a href="explore.html">Explore</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="destinations.html">Destinations</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+
+      <!-- Customer Service -->
+      <div class="footer-col">
+        <h4>Customer Service</h4>
+        <ul>
+          <li><a href="destinations.html">Destination</a></li>
+          <li><a href="cart.html">How to Order</a></li>
+          <li><a href="checkout.html">Payment Options</a></li>
+          <li><a href="index.html">Terms & Conditions</a></li>
+          <li><a href="index.html">Privacy Policy</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact -->
+      <div class="footer-col">
+        <h4>Get in Touch</h4>
+        <p><strong>Phone:</strong> +254 715 665 770</p>
+        <p><strong>Email:</strong> ladoshahotel@gmail.com</p>
+        <div class="social-links">
+          <a href="https://www.facebook.com/ladoshahotel/"><img src="assets/icons/facebook.png" alt="Facebook"></a>
+          <a href="#"><img src="assets/icons/instagram.png" alt="Instagram"></a>
+          <a href="#"><img src="assets/icons/x.png" alt="X"></a>
+          <a href="#"><img src="assets/icons/youtube.png" alt="YouTube"></a>
+        </div>
+      </div>
+
     </div>
-  </header>
-
-  <!-- ================= MAIN ================= -->
-  <main class="container cart-container">
-    <h1>Your Cart</h1>
-    <div id="cart-contents"></div>
-    <div id="cart-summary" class="cart-summary"></div>
-
-    <!-- Payment Options -->
-    <div style="margin-top:20px;">
-      <h3>Choose Payment Method:</h3>
-      <label><input type="radio" name="payment" value="online" checked/> Pay Online</label><br/>
-      <label><input type="radio" name="payment" value="delivery"/> Pay on Delivery</label>
+  </div>
+  
+  <div class="footer-bottom">
+    <div class="container">
+      <p>&copy; 2025 La Dosha Hotel. All Rights Reserved.</p>
     </div>
+  </div>
+</footer>
 
-    <!-- Checkout Actions -->
-    <div class="checkout-actions">
-      <button class="btn primary" id="checkout-btn" style="display:none">Checkout</button>
-      <button class="btn alt" id="order-btn" style="display:none">Order Now</button>
-    </div>
-  </main>
+<!-- ================= SCRIPTS ================= -->
+<script src="js/cart.js"></script>
+<script>
+  // Mobile menu toggle
+  const menuToggle = document.querySelector('.menu-toggle');
+  const navMenu = document.getElementById('navMenu');
+  menuToggle.addEventListener('click', () => {
+    navMenu.classList.toggle('active');
+  });
 
-  <!-- ================= FOOTER ================= -->
-  <footer class="footer">
-    <div class="container">&copy; 2025 La Dosha Hotel</div>
-  </footer>
-
-  <!-- ================= SCRIPT ================= -->
-  <script>
-    const key = 'ladosha_cart_v3';
-    const cart = JSON.parse(localStorage.getItem(key) || '[]');
-    const cartContainer = document.getElementById('cart-contents');
-    const cartSummary = document.getElementById('cart-summary');
-
-    function renderCart() {
-      cartContainer.innerHTML = '';
-      let subtotal = 0;
-
-      if(cart.length === 0) {
-        cartContainer.innerHTML = '<p>Your cart is empty.</p>';
-        cartSummary.innerHTML = '';
-        return;
-      }
-
-      cart.forEach((item, idx) => {
-        subtotal += item.price * item.qty;
-        const el = document.createElement('div');
-        el.className = 'cart-item';
-        el.innerHTML = `
-          <img src="${item.img || 'assets/images/meal_placeholder.png'}" alt="${item.name}">
-          <div class="cart-details">
-            <h3>${item.name}</h3>
-            <div class="cart-meta">
-              Qty: ${item.qty}<br/>
-              Location: ${item.location || '-'}<br/>
-              Note: ${item.note || '-'}<br/>
-              Delivery: ${item.delivery || 'Pickup'}
-            </div>
-            <div class="cart-price">KES ${item.price * item.qty}</div>
-          </div>
-          <button class="cart-remove" onclick="removeFromCart(${idx})">Remove</button>
-        `;
-        cartContainer.appendChild(el);
-      });
-
-      cartSummary.innerHTML = `
-        <h2>Order Summary</h2>
-        <p><strong>Subtotal:</strong> KES ${subtotal}</p>
-        <p><strong>Grand Total:</strong> KES ${subtotal}</p>
+  // Render cart and summary actions
+  const oldRenderCart = renderCart;
+  renderCart = function () {
+    oldRenderCart();
+    const summary = document.getElementById('cart-summary');
+    const mobileTotal = document.getElementById('mobile-total');
+    if (summary && summary.innerHTML.trim() !== '') {
+      // Update mobile total
+      const total = getCartTotal();
+      mobileTotal.textContent = `KES ${total}`;
+      summary.innerHTML += `
+        <div class="cart-actions">
+          <a class="btn secondary" href="menu.html">← Continue Shopping</a>
+          <a class="btn primary" href="checkout.html">Checkout</a>
+          <button class="btn secondary" onclick="clearCart()">Clear Cart</button>
+        </div>
       `;
-
-      document.getElementById('cart-count').textContent = cart.length;
     }
-
-    function removeFromCart(index) {
-      cart.splice(index,1);
-      localStorage.setItem(key, JSON.stringify(cart));
-      renderCart();
-    }
-
-    // --- Payment toggle ---
-    const checkoutBtn = document.getElementById('checkout-btn');
-    const orderBtn = document.getElementById('order-btn');
-    document.querySelectorAll('input[name="payment"]').forEach(radio => {
-      radio.addEventListener('change', e => {
-        if(e.target.value === 'online') {
-          checkoutBtn.style.display = 'inline-block';
-          orderBtn.style.display = 'none';
-        } else {
-          checkoutBtn.style.display = 'none';
-          orderBtn.style.display = 'inline-block';
-        }
-      });
-    });
-
-    // --- Actions ---
-    checkoutBtn.addEventListener('click', () => {
-      alert('Redirecting to payment gateway...');
-      // Here you’d integrate online payment
-    });
-
-    orderBtn.addEventListener('click', () => {
-      let orderText = "Order details:\\n";
-      cart.forEach(c => {
-        orderText += `${c.name} x${c.qty} — KES ${c.price * c.qty}\\nLocation: ${c.location || '-'}\\nNote: ${c.note || '-'}\\nDelivery: ${c.delivery || 'Pickup'}\\n\\n`;
-      });
-      window.location.href = 'mailto:ladoshahotel@gmail.com?subject=New Order&body=' + encodeURIComponent(orderText);
-    });
-
-    renderCart();
-  </script>
+  };
+  document.addEventListener('DOMContentLoaded', renderCart);
+</script>
 </body>
 </html>

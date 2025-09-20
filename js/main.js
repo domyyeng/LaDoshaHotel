@@ -3,9 +3,47 @@
    ======================================================= */
 
 document.addEventListener('DOMContentLoaded', () => {
+  initMobileMenu();
   initRotatingTagline();
   initMealOfDayBadge();
 });
+
+/* -------------------------------------------------------
+   Mobile menu toggle
+------------------------------------------------------- */
+function initMobileMenu() {
+  const toggle = document.querySelector('.menu-toggle');
+  const nav = document.getElementById('navMenu');
+
+  if (!toggle || !nav) return;
+
+  toggle.addEventListener('click', () => {
+    nav.classList.toggle('show');
+    // Animate icon toggle (optional)
+    toggle.classList.toggle('active');
+  });
+}
+
+<script>
+  // Hamburger toggle
+  const menuToggle = document.querySelector('.menu-toggle');
+  const navMenu = document.getElementById('navMenu');
+
+  menuToggle.addEventListener('click', () => {
+    navMenu.classList.toggle('active');
+  });
+
+  // Scroll shadow effect
+  const header = document.querySelector('.site-header');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 10) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  });
+</script>
+
 
 /* -------------------------------------------------------
    Rotating tagline for .animated-sub

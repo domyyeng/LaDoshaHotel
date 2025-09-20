@@ -1,215 +1,282 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <!-- ================= META ================= -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>La Dosha Hotel</title>
+  <title>Home — La Dosha Hotel</title>
   <link rel="stylesheet" href="css/style.css" />
-</head>
-
-<body>
-  <!-- ================= HEADER ================= -->
-  <header class="site-header">
-    <div class="container header-inner">
-      <!-- Logo -->
-      <div class="logo">
-        <a href="index.html">
-          <img src="assets/images/ladoshalogo.png"
-               alt="La Dosha Hotel Logo"
-               style="height:50px; width:auto; vertical-align:middle;" />
-        </a>
-      </div>
-
-      <!-- Navigation -->
-      <nav class="main-nav">
-        <a href="index.html">Home</a>
-        <a href="menu.html">Menu</a>
-        <a href="explore.html">Explore</a>
-        <a href="about.html">About</a>
-        <a href="destinations.html">Destination</a>
-        <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
-      </nav>
-    </div>
-  </header>
-
-  <!-- ================= MAIN ================= -->
-  <main class="container">
-
-    <!-- Hero Section -->
-    <section class="hero">
-      <div class="left">
-        <div class="animated-bullet">Now Serving • Kinamba, Naivasha</div>
-
-        <h1 class="hype">La Dosha Hotel</h1>
-
-        <div style="margin-top:8px; color:#444;">
-          Opened August 2025 • Ten-seater boutique hotel
-        </div>
-
-        <!-- CTA Buttons -->
-        <div style="margin-top:12px;">
-          <button class="btn primary" onclick="location.href='menu.html'">Order Now</button>
-          <button class="btn" onclick="location.href='explore.html'">Explore Our Meals</button>
-        </div>
-
-        <!-- Meal of the Day (clickable link & animates on click) -->
-        <!-- href will be set dynamically from JS (so it matches your meals array) -->
-        <div style="margin-top:12px;">
-          <a href="#" id="meal-of-day-badge" class="badge" role="button" aria-label="Open Meal of the Day">Meal of the Day</a>
-          <span class="animated-sub">Delicious</span>
-        </div>
-
-        <!-- Contact -->
-        <div style="margin-top:12px; color:#666;">
-          Email: <a href="mailto:ladoshahotel@gmail.com">ladoshahotel@gmail.com</a>
-          • Phone: 0715665770
-        </div>
-      </div>
-
-      <!-- Right Side Image (clickable, points to Meal of the Day) -->
-      <div class="right">
-        <div class="card plate-3d fancy-3d">
-          <a href="#" id="meal-of-day-image-link" aria-label="Open Meal of the Day">
-            <img id="meal-of-day-image"
-                 src="assets/images/meal_of_the_day.png"
-                 class="img godmode"
-                 alt="Meal of the Day"
-                 style="height:280px; border-radius:12px;" />
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- Explore Meals -->
-    <section style="margin-top:20px;">
-      <h2>Explore Our Meals</h2>
-      <div class="menu-grid" id="home-meals"></div>
-    </section>
-
-    <!-- Gallery -->
-    <section style="margin-top:20px;">
-      <h2>Gallery</h2>
-      <div class="gallery">
-        <img src="assets/images/gallery1.jpg" alt="Chips" onclick="openLightbox(this.src)" />
-        <img src="assets/images/gallery2.jpg" alt="Restaurant inside" onclick="openLightbox(this.src)" />
-        <img src="assets/images/hotel_front.png" alt="Hotel front" onclick="openLightbox(this.src)" />
-        <img src="assets/images/3d_plate.png" alt="Meal 3D" onclick="openLightbox(this.src)" />
-      </div>
-    </section>
-
-    <!-- Clients Feedback -->
-    <section style="margin-top:20px;">
-      <h2>Clients Feedback</h2>
-      <div class="cards">
-        <div class="card">
-          <strong>Jane K.</strong>
-          <p>"Warm atmosphere, delicious chips masala. Cozy ten-seater gem in Kinamba."</p>
-        </div>
-
-        <div class="card">
-          <strong>Mark O.</strong>
-          <p>"Quick delivery and friendly staff."</p>
-        </div>
-
-        <div class="card">
-          <strong>Lillian M.</strong>
-          <p>"Futuristic presentation and great taste."</p>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- ================= FOOTER ================= -->
-  <footer class="footer">
-    <div class="container">&copy; 2025 La Dosha Hotel — Kinamba, Naivasha</div>
-  </footer>
-
-  <!-- ================= SCRIPTS ================= -->
-  <script src="js/cart.js"></script>
-  <script src="js/main.js"></script>
-
-  <script>
-    /* ============================
-       Meals dataset (with links)
-       Update image filenames if your files differ
-       ============================ */
-    const meals = [
-      { id: 1, name: 'Chips (one plate)', price: 100, img: 'assets/images/meal_chips.jpg', link: 'meals/meal-1.html' },
-      { id: 2, name: 'Chips Masala (one plate)', price: 130, img: 'assets/images/meal_chips_masala.jpg', link: 'meals/meal-2.html' },
-      { id: 3, name: 'Signature Roast', price: 450, img: 'assets/images/meal_chips.jpg', link: 'meals/meal-3.html' },
-      { id: 4, name: 'Fresh Juice', price: 180, img: 'assets/images/meal_of_the_day.png', link: 'meals/meal-4.html' }
-    ];
-
-    /* ============================
-       Configure Meal of the Day
-       (choose the id you want to highlight)
-       ============================ */
-    const mealOfDayId = 4; // change to whichever meal id is "meal of the day"
-    const mealOfDay = meals.find(m => m.id === mealOfDayId) || meals[0];
-    const badge = document.getElementById('meal-of-day-badge');
-    const imgLink = document.getElementById('meal-of-day-image-link');
-    const imgEl = document.getElementById('meal-of-day-image');
-
-    // assign proper hrefs so they match the meals array
-    if (badge) badge.setAttribute('href', mealOfDay.link);
-    if (imgLink) imgLink.setAttribute('href', mealOfDay.link);
-    if (imgEl && mealOfDay.img) imgEl.src = mealOfDay.img;
-
-    // animate & navigate helper using the Web Animations API
-    function animateThenNavigate(el, url) {
-      if (!el) { location.href = url; return; }
-      try {
-        const animation = el.animate(
-          [
-            { transform: 'scale(1)' },
-            { transform: 'scale(1.06)' },
-            { transform: 'scale(1)' }
-          ],
-          { duration: 500, easing: 'cubic-bezier(.2,.9,.2,1)' }
-        );
-        // navigate when animation finishes
-        animation.finished.then(() => { location.href = url; }).catch(() => { location.href = url; });
-      } catch {
-        // fallback
-        location.href = url;
-      }
+  <style>
+    /* ===== Reset & Base ===== */
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: linear-gradient(135deg, #ffecd2, #fcb69f);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 100px; /* Space for header */
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
     }
 
-    // Intercept clicks to animate then navigate
-    badge && badge.addEventListener('click', function (e) {
-      // allow middle-click / ctrl-click to open in new tab
-      if (e.metaKey || e.ctrlKey || e.button === 1) return;
-      e.preventDefault();
-      animateThenNavigate(badge, badge.href);
-    });
+    a { text-decoration: none; color: inherit; }
 
-    imgLink && imgLink.addEventListener('click', function (e) {
-      if (e.metaKey || e.ctrlKey || e.button === 1) return;
-      e.preventDefault();
-      // animate the image element for visual feedback
-      animateThenNavigate(imgEl, imgLink.href);
-    });
+    /* ===== Header ===== */
+    .site-header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(255,255,255,0.95);
+      z-index: 10;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .site-header .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+    }
 
-    /* ============================
-       Render clickable meal cards
-       (each card is an <a> that opens the meal page)
-       ============================ */
-    const grid = document.getElementById('home-meals');
+    /* Logo */
+    .logo img { height:50px; width:auto; }
 
-    meals.forEach(m => {
-      const a = document.createElement('a');
-      a.href = m.link;
-      a.className = 'menu-item card';
-      a.style.textDecoration = 'none';
-      a.style.color = 'inherit';
-      a.innerHTML = `
-        <img src="${m.img}" class="img godmode" alt="${m.name}" />
-        <h4>${m.name}</h4>
-        <div class="price">KES ${m.price}</div>
-      `;
-      grid.appendChild(a);
-    });
-  </script>
+    /* Navigation */
+    .main-nav {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+    .main-nav a {
+      font-weight: 500;
+      color: #333;
+      transition: color 0.3s;
+    }
+    .main-nav a:hover { color: #ff8800; }
+
+    /* Hamburger */
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 25px;
+      height: 18px;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    .menu-toggle span {
+      display: block;
+      height: 3px;
+      background: #333;
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+    .main-nav.active { display: flex; flex-direction: column; gap: 10px; position: absolute; top: 60px; right: 20px; background: #fff; padding: 15px 20px; border-radius: 10px; box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+
+    
+    /* ===== Hero Section ===== */
+    .menu-hero-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin-top: 40px;
+      z-index: 1;
+    }
+
+    /* Main Menu Button */
+    #menu-button {
+      display: inline-block;
+      background: linear-gradient(135deg, #ff8800, #ff6600);
+      color: #fff;
+      padding: 30px 70px;
+      border-radius: 15px;
+      font-weight: 800;
+      font-size: 2.5rem;
+      letter-spacing: 2px;
+      box-shadow: 0 12px 25px rgba(0,0,0,0.25);
+      cursor: pointer;
+      transform: scale(0);
+      animation: blowUp 1s forwards;
+      animation-timing-function: cubic-bezier(0.68, -0.55, 0.27, 1.55);
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 2;
+    }
+    #menu-button:hover {
+      transform: scale(1.08);
+      box-shadow: 0 18px 35px rgba(0,0,0,0.3);
+      background: linear-gradient(135deg, #ff9933, #ff5500);
+    }
+
+    .menu-subtitle {
+      margin-top: 20px;
+      font-size: 1.3rem;
+      font-weight: 500;
+      color: #222;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: slideUp 1s forwards;
+      animation-delay: 1s;
+    }
+
+    .menu-story {
+      margin-top: 15px;
+      font-size: 1rem;
+      color: #333;
+      font-style: italic;
+      max-width: 500px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: slideUp 1s forwards;
+      animation-delay: 1.5s;
+      line-height: 1.5;
+    }
+
+    .hero-contact {
+      margin-top: 25px;
+      font-size: 0.95rem;
+      text-align: center;
+    }
+    .hero-contact a { color: #333; font-weight: 500; }
+
+    /* ===== Animations ===== */
+    @keyframes blowUp {
+      0% { transform: scale(0); opacity:0; }
+      60% { transform: scale(1.2); opacity:1; }
+      80% { transform: scale(0.95); }
+      100% { transform: scale(1); }
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Floating particles */
+    body::before {
+      content:"";
+      position:absolute;
+      top:0; left:0;
+      width:100%; height:100%;
+      background: radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px);
+      background-size: 20px 20px;
+      pointer-events:none;
+      animation: moveParticles 30s linear infinite;
+      z-index: 0;
+    }
+    @keyframes moveParticles {
+      from { background-position:0 0; }
+      to { background-position:400px 400px; }
+    }
+
+    /* ===== Footer ===== */
+    .footer {
+      margin-top: auto;
+      width: 100%;
+      background: #222;
+      color: #fff;
+      padding: 30px 20px;
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    /* ===== Responsive ===== */
+    @media(max-width:768px){
+      #menu-button { font-size:2rem; padding:25px 50px; }
+      .menu-subtitle { font-size:1.1rem; }
+      .menu-story { font-size:0.95rem; max-width: 300px; }
+      .main-nav { display: none; flex-direction: column; }
+      .menu-toggle { display: flex; }
+      .main-nav.active { display: flex; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <div class="logo"><a href="index.html"><img src="assets/images/ladoshalogo.png" alt="La Dosha Hotel Logo" /></a></div>
+    <nav class="main-nav" id="navMenu">
+      <a href="index.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="explore.html">Explore</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="destinations.html">Destination</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<a href="cart.html" class="cart-float">🛒 <span id="cart-count" class="cart-count">0</span></a>
+<div id="toast" class="toast"></div>
+
+<main class="container">
+  <div class="menu-hero-wrapper">
+    <div class="animated-bullet">Now Serving • Kinamba, Naivasha</div>
+    <h1 class="hype">La Dosha Hotel</h1>
+    <div class="hero-subtitle">Opened August 2025</div>
+
+    <!-- Main Menu Button -->
+    <a href="menu.html" id="menu-button" class="menu-button" role="button" aria-label="Open Menu">
+      OUR MENU
+    </a>
+    <span class="menu-subtitle">
+      Delicious & Fresh • Curated for You
+    </span>
+    <p class="menu-story" id="menu-story">
+      We are more than food—we are your partner in taste, comfort, and unforgettable moments. Every dish tells a story, and this is where yours begins.
+    </p>
+
+    <!-- Contact Info -->
+    <div class="hero-contact">
+      Email: <a href="mailto:ladoshahotel@gmail.com">ladoshahotel@gmail.com</a> • 
+      Phone: <a href="tel:+254715665770">0715665770</a>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <p>&copy; 2025 La Dosha Hotel. All Rights Reserved.</p>
+    <p>Designed to delight your taste & experience.</p>
+  </div>
+</footer>
+
+<script src="js/cart.js"></script>
+<script>
+  function addCustomToCart(id, btn){
+  const card = btn.closest('.menu-item.card');
+  const meal = fullMenu.find(m=>m.id===id);
+  const qty = Number(card.querySelector('.quantity-box input').value);
+  addToCart('meal-'+id, meal.name, meal.price, qty, {img: meal.img});
+  showToast(`${meal.name} x${qty} added to cart`);
+}
+  // Hamburger toggle
+  const menuToggle = document.querySelector('.menu-toggle');
+  const navMenu = document.getElementById('navMenu');
+  menuToggle.addEventListener('click', () => navMenu.classList.toggle('active'));
+
+  // Word-by-word story reveal
+  const storyEl = document.getElementById('menu-story');
+  const storyText = storyEl.textContent;
+  storyEl.textContent = '';
+  const words = storyText.split(' ');
+  words.forEach((word, i) => {
+    const span = document.createElement('span');
+    span.textContent = word + ' ';
+    span.style.opacity = 0;
+    span.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+    span.style.display = 'inline-block';
+    span.style.transform = 'translateY(10px)';
+    storyEl.appendChild(span);
+    setTimeout(() => {
+      span.style.opacity = 1;
+      span.style.transform = 'translateY(0)';
+    }, i * 150);
+  });
+</script>
+
 </body>
 </html>

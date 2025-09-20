@@ -1,46 +1,65 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Destination — La Dosha Hotel</title>
-  <link rel="stylesheet" href="css/style.css"/>
-
-  <!-- Leaflet CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <link rel="stylesheet" href="css/style.css" />
   <style>
-    /* Map container */
-    #map {
-      height: 420px;
-      border-radius: 8px;
-      margin-top: 12px;
+    body { font-family: sans-serif; background: #f9f9f9; margin:0; }
+    .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; margin: 20px 0; }
+    .menu-item.card {
+      border: 1px solid #ddd; border-radius: 10px; padding: 15px; text-align: center;
+      background: #fff; transition: transform 0.2s ease, box-shadow 0.2s ease; position: relative; overflow: hidden;
     }
+    .menu-item.card:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 6px 15px rgba(0,0,0,0.15); }
+    .menu-item img { width: 100%; height: 160px; object-fit: cover; border-radius: 8px; }
+    .menu-item h4 { margin: 10px 0 6px; font-size: 18px; }
+    .menu-item .price { font-weight: bold; color: #ff8800; margin-bottom: 8px; }
+    .btn { padding: 8px 14px; border: none; border-radius: 6px; cursor: pointer; text-decoration: none; text-align: center; margin: 3px 0; font-size: 14px; }
+    .btn.primary { background: #ff8800; color: #fff; font-weight: 600; }
+    .btn.primary:hover { background: #e67600; }
+    .btn.secondary { background: #f0f0f0; color: #333; }
+    .btn.secondary:hover { background: #ddd; }
+
+    .details-dropdown {
+      max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; text-align: left;
+      margin-top: 0; padding: 0 0; border-top: 1px solid #eee; background: #fafafa; border-radius: 6px; font-size: 14px;
+    }
+    .details-dropdown.open { max-height: 350px; padding: 8px; margin-top: 8px; }
+    .details-dropdown label { display: block; margin-top: 6px; font-weight: 500; }
+    .details-dropdown input, .details-dropdown textarea, .details-dropdown select { width: 100%; margin-top: 3px; padding: 6px; border-radius: 6px; border: 1px solid #ccc; font-size: 14px; }
+    .details-dropdown .quantity-box { display: flex; gap: 6px; align-items: center; margin-top: 6px; }
+
+    .category-bar { display:flex; gap:8px; margin:20px 0; flex-wrap:wrap; }
+    .category-bar button { padding:6px 12px; border-radius:6px; border:none; cursor:pointer; background:#eee; font-weight:500; }
+    .category-bar button.active { background:#ff8800; color:#fff; }
+
+    #menu-search { width:100%; padding:10px; border-radius:6px; border:1px solid #ccc; margin-bottom:15px; }
+
+    .toast { position: fixed; bottom: 30px; right: 20px; background: #222; color: #fff; padding: 12px 18px; border-radius: 8px; font-size: 15px; font-weight: 600; opacity: 0; transform: translateY(20px); pointer-events: none; transition: opacity 0.4s ease, transform 0.4s ease; z-index: 3000; }
+    .toast.show { opacity: 1; transform: translateY(0); }
   </style>
+    
 </head>
 <body>
-  <!-- ================= HEADER ================= -->
-  <header class="site-header">
-    <div class="container header-inner">
-      <div class="logo">
-        <a href="index.html">
-          <img
-            src="assets/images/ladoshalogo.png"
-            alt="La Dosha Hotel Logo"
-            style="height:50px; width:auto; vertical-align:middle;"
-          />
-        </a>        
-      </div>
 
-      <nav class="main-nav">
-        <a href="index.html">Home</a>
-        <a href="menu.html">Menu</a>
-        <a href="explore.html">Explore</a>
-        <a href="about.html">About</a>
-        <a href="destinations.html">Destination</a>
-        <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
-      </nav>
-    </div>
-  </header>
+<header class="site-header">
+  <div class="container header-inner">
+    <div class="logo"><a href="index.html"><img src="assets/images/ladoshalogo.png" alt="La Dosha Hotel Logo" style="height:50px; width:auto;" /></a></div>
+    <button class="menu-toggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+    <nav class="main-nav" id="navMenu">
+      <a href="index.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="explore.html">Explore</a>
+      <a href="about.html">About</a>
+      <a href="destinations.html">Destination</a>
+    </nav>
+  </div>
+</header>
+
+<a href="cart.html" class="cart-float">🛒 <span id="cart-count" class="cart-count">0</span></a>
+<div id="toast" class="toast"></div>
 
   <!-- ================= MAIN CONTENT ================= -->
   <main class="container">
@@ -58,23 +77,77 @@
       <h2>Nearby Places</h2>
       <ul>
         <li>Kinamba Shopping Centre</li>
-        <li>Dea's Gardens</li>
-        <li>Finlays Horticulture</li>
-        <li>Naivasha Town Services</li>
+        <li>Wa Josali</li>
+        <li>Beulah</li>
+        <li>Samcom Propertis</li>
       </ul>
     </section>
   </main>
 
   <!-- ================= FOOTER ================= -->
-  <footer class="footer">
-    <div class="container">&copy; 2025 La Dosha Hotel — Kinamba, Naivasha</div>
-  </footer>
+<footer class="footer">
+  <div class="footer-top">
+    <div class="container footer-grid">
+      
+      <!-- About -->
+      <div class="footer-col">
+        <h4>La Dosha Hotel</h4>
+        <p>La Dosha Hotel brings you a fine dining experience with online ordering, 
+          fast delivery, and luxury hospitality. Our goal is to make every meal memorable.</p>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="menu.html">Menu</a></li>
+          <li><a href="explore.html">Explore</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="destinations.html">Destinations</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+
+      <!-- Customer Service -->
+      <div class="footer-col">
+        <h4>Customer Service</h4>
+        <ul>
+          <li><a href="destinations.html">Destination</a></li>
+          <li><a href="cart.html">How to Order</a></li>
+          <li><a href="checkout.html">Payment Options</a></li>
+          <li><a href="index.html">Terms & Conditions</a></li>
+          <li><a href="index.html">Privacy Policy</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact -->
+      <div class="footer-col">
+        <h4>Get in Touch</h4>
+        <p><strong>Phone:</strong> +254 715 665 770</p>
+        <p><strong>Email:</strong> ladoshahotel@gmail.com</p>
+        <div class="social-links">
+          <a href="https://www.facebook.com/ladoshahotel/"><img src="assets/icons/facebook.png" alt="Facebook"></a>
+          <a href="#"><img src="assets/icons/instagram.png" alt="Instagram"></a>
+          <a href="#"><img src="assets/icons/x.png" alt="X"></a>
+          <a href="#"><img src="assets/icons/youtube.png" alt="YouTube"></a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  
+  <div class="footer-bottom">
+    <div class="container">
+      <p>&copy; 2025 La Dosha Hotel. All Rights Reserved.</p>
+    </div>
+  </div>
+</footer>
 
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script>
     // ✅ Approx coordinates from your Google Maps link (Kinamba, Naivasha)
-    const hotelCoords = [-0.7172, 36.4310];
+    const hotelCoords = [-0.7221204554427383, 36.473879653245724];
 
     // Initialize map
     const map = L.map('map').setView(hotelCoords, 16);
@@ -89,7 +162,24 @@
     L.marker(hotelCoords)
       .addTo(map)
       .bindPopup('<b>La Dosha Hotel</b><br>Kinamba, Naivasha')
-      .openPopup();
+      .openPopup();      
   </script>
+  <script src="js/cart.js"></script>
+<script>
+const menuToggle = document.querySelector('.menu-toggle');
+const navMenu = document.getElementById('navMenu');
+menuToggle.addEventListener('click', () => navMenu.classList.toggle('active'));
+
+
+
+function toggleDetails(btn){
+  document.querySelectorAll('.details-dropdown.open').forEach(dd=>{
+    if(dd!==btn.nextElementSibling) dd.classList.remove('open');
+  });
+  btn.nextElementSibling.classList.toggle('open');
+}
+
+
+</script>
 </body>
 </html>

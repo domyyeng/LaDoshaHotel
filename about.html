@@ -8,29 +8,24 @@
 </head>
 <body>
 
-  <!-- ================= HEADER ================= -->
-  <header class="site-header">
-    <div class="container header-inner">
-      <div class="logo">
-        <a href="index.html">
-          <img
-            src="assets/images/ladoshalogo.png"
-            alt="La Dosha Hotel Logo"
-            style="height:50px; width:auto; vertical-align:middle;"
-          />
-        </a>        
-      </div>
+<header class="site-header">
+  <div class="container header-inner">
+    <div class="logo"><a href="index.html"><img src="assets/images/ladoshalogo.png" alt="La Dosha Hotel Logo" style="height:50px; width:auto;" /></a></div>
+    <button class="menu-toggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+    <nav class="main-nav" id="navMenu">
+      <a href="index.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="explore.html">Explore</a>
+      <a href="about.html">About</a>
+      <a href="destinations.html">Destination</a>
+    </nav>
+  </div>
+</header>
 
-      <nav class="main-nav">
-        <a href="index.html">Home</a>
-        <a href="menu.html">Menu</a>
-        <a href="explore.html">Explore</a>
-        <a href="about.html">About</a>
-        <a href="destinations.html">Destination</a>
-        <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
-      </nav>
-    </div>
-  </header>
+<a href="cart.html" class="cart-float">🛒 <span id="cart-count" class="cart-count">0</span></a>
+<div id="toast" class="toast"></div>
+
+  
 
   <!-- ================= MAIN CONTENT ================= -->
   <main class="container">
@@ -39,7 +34,7 @@
     <h1>About La Dosha Hotel</h1>
     <p>
       Opened August 2025 in Kinamba, Naivasha, Kenya.  
-      A cozy ten-seater boutique hotel offering carefully prepared meals and a friendly atmosphere.
+      Offering carefully prepared meals and a friendly atmosphere.
     </p>
 
     <!-- Mission -->
@@ -59,10 +54,10 @@
     <!-- Gallery -->
     <h2>Gallery</h2>
     <div class="gallery">
-      <img src="assets/images/hotel_front.svg" alt="Hotel Front" onclick="openLightbox(this.src)" />
-      <img src="assets/images/gallery1.svg" alt="Gallery Image 1" onclick="openLightbox(this.src)" />
-      <img src="assets/images/gallery2.svg" alt="Gallery Image 2" onclick="openLightbox(this.src)" />
-      <img src="assets/images/3d_plate.svg" alt="Special Dish" onclick="openLightbox(this.src)" />
+      <img src="assets/images/hotel_front.png" alt="Hotel Front" onclick="openLightbox(this.src)" />
+      <img src="assets/images/gallery1.jpg" alt="Gallery Image 1" onclick="openLightbox(this.src)" />
+      <img src="assets/images/gallery2.jpg" alt="Gallery Image 2" onclick="openLightbox(this.src)" />
+      <img src="assets/images/3d_plate.png" alt="Special Dish" onclick="openLightbox(this.src)" />
     </div>
 
     <!-- Contact Info -->
@@ -76,14 +71,82 @@
   </main>
 
   <!-- ================= FOOTER ================= -->
-  <footer class="footer">
-    <div class="container">
-      &copy; 2025 La Dosha Hotel
+<footer class="footer">
+  <div class="footer-top">
+    <div class="container footer-grid">
+      
+      <!-- About -->
+      <div class="footer-col">
+        <h4>La Dosha Hotel</h4>
+        <p>La Dosha Hotel brings you a fine dining experience with online ordering, 
+          fast delivery, and luxury hospitality. Our goal is to make every meal memorable.</p>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="menu.html">Menu</a></li>
+          <li><a href="explore.html">Explore</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="destinations.html">Destinations</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+
+      <!-- Customer Service -->
+      <div class="footer-col">
+        <h4>Customer Service</h4>
+        <ul>
+          <li><a href="destinations.html">Destination</a></li>
+          <li><a href="cart.html">How to Order</a></li>
+          <li><a href="checkout.html">Payment Options</a></li>
+          <li><a href="index.html">Terms & Conditions</a></li>
+          <li><a href="index.html">Privacy Policy</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact -->
+      <div class="footer-col">
+        <h4>Get in Touch</h4>
+        <p><strong>Phone:</strong> +254 715 665 770</p>
+        <p><strong>Email:</strong> ladoshahotel@gmail.com</p>
+        <div class="social-links">
+          <a href="https://www.facebook.com/ladoshahotel/"><img src="assets/icons/facebook.png" alt="Facebook"></a>
+          <a href="#"><img src="assets/icons/instagram.png" alt="Instagram"></a>
+          <a href="#"><img src="assets/icons/x.png" alt="X"></a>
+          <a href="#"><img src="assets/icons/youtube.png" alt="YouTube"></a>
+        </div>
+      </div>
+
     </div>
-  </footer>
+  </div>
+  
+  <div class="footer-bottom">
+    <div class="container">
+      <p>&copy; 2025 La Dosha Hotel. All Rights Reserved.</p>
+    </div>
+  </div>
+</footer>
 
   <!-- ================= SCRIPTS ================= -->
-  <script src="js/main.js"></script>
+  <script src="js/cart.js"></script>
+<script>
+const menuToggle = document.querySelector('.menu-toggle');
+const navMenu = document.getElementById('navMenu');
+menuToggle.addEventListener('click', () => navMenu.classList.toggle('active'));
+
+
+
+function toggleDetails(btn){
+  document.querySelectorAll('.details-dropdown.open').forEach(dd=>{
+    if(dd!==btn.nextElementSibling) dd.classList.remove('open');
+  });
+  btn.nextElementSibling.classList.toggle('open');
+}
+
+
+</script>
 
 </body>
 </html>

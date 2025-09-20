@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Explore — La Dosha Hotel</title>
+  <title>Contact — La Dosha Hotel</title>
   <link rel="stylesheet" href="css/style.css" />
   <style>
     body { font-family: sans-serif; background: #f9f9f9; margin:0; }
@@ -62,9 +62,48 @@
 <div id="toast" class="toast"></div>
 
 <!-- ================= MAIN CONTENT ================= -->
-  <main class="container" role="main">
-    <h1>Best Designed Meals</h1>
-    <div class="grid cols-3" id="explore-grid"></div>
+  <main class="container">
+
+    <!-- Hero Section -->
+    <section class="hero">
+  <div class="hero-left">
+    <div class="animated-bullet">Now Serving • Kinamba, Naivasha</div>
+
+    <h1 class="hype">La Dosha Hotel</h1>
+
+    <div class="hero-subtitle">
+      Opened August 2025
+    </div>
+
+    <!-- Contact Info -->
+    <div class="hero-contact">
+      Email: <a href="mailto:ladoshahotel@gmail.com">ladoshahotel@gmail.com</a>
+      • Phone: <a href="tel:+254715665770">0715665770</a>
+    </div>
+  </div>
+
+
+</section>
+<!-- Clients Feedback -->
+    <section style="margin-top:20px;">
+      <h2>Clients Feedback</h2>
+      <div class="cards">
+        <div class="card">
+          <strong>Jane K.</strong>
+          <p>"Warm atmosphere, delicious chips masala. Cozy ten-seater gem in Kinamba."</p>
+        </div>
+
+        <div class="card">
+          <strong>Mark O.</strong>
+          <p>"Quick delivery and friendly staff."</p>
+        </div>
+
+        <div class="card">
+          <strong>Lillian M.</strong>
+          <p>"Futuristic presentation and great taste."</p>
+        </div>
+      </div>
+    </section>
   </main>
 
   <!-- ================= FOOTER ================= -->
@@ -126,99 +165,12 @@
   </div>
 </footer>
 
-  <!-- Scripts -->
-  <script src="js/cart.js"></script>
-  <script>
-    const fancyMeals = [
-      { id: 101, name: "mukimo", price: 100, img: "assets/images/mukimo.jpg", desc: "A visual feast with multiple sides" },
-      { id: 102, name: "Sunset Chips Masala", price: 130, img: "assets/images/meal_chips_masala.jpg", desc: "Spiced just right" },
-      { id: 103, name: "Signature Chips Plate", price: 100, img: "assets/images/chips.jpg", desc: "Classic comfort" },
-    ];
 
-    const grid = document.getElementById("explore-grid");
 
-    fancyMeals.forEach(meal => {
-      const card = document.createElement("div");
-      card.className = "card menu-item";
-      card.innerHTML = `
-        <img src="${meal.img}" alt="${meal.name}" loading="lazy"/>
-        <h4>${meal.name}</h4>
-        <p>${meal.desc}</p>
-        <div class="meta">
-          <div class="price">KES ${meal.price}</div>
-          <div><button class="btn primary">View</button></div>
-        </div>`;
-      grid.appendChild(card);
 
-      card.querySelector("button").addEventListener("click", () => openMealDetail(meal.id));
-    });
-
-    function openMealDetail(id) {
-      const meal = fancyMeals.find(x => x.id === id);
-      if (!meal) return;
-      document.body.style.overflow = "hidden";
-
-      const modal = document.createElement("div");
-      modal.className = "modal-bg";
-      modal.setAttribute("role", "dialog");
-      modal.setAttribute("aria-modal", "true");
-
-      const box = document.createElement("div");
-      box.className = "modal-box";
-
-      box.innerHTML = `
-        <img src="${meal.img}" alt="${meal.name}"/>
-        <div class="modal-content">
-          <h3>${meal.name}</h3>
-          <p>${meal.desc}</p>
-          <p class="price">KES ${meal.price}</p>
-
-          <label for="people">How many?
-            <input type="number" id="people" value="1" min="1"/>
-          </label>
-
-          <label for="loc">Location
-            <input id="loc" value="Kinamba, Naivasha"/>
-          </label>
-
-          <label for="note">Special instructions
-            <input id="note" placeholder="preferences"/>
-          </label>
-
-          <div>
-            <button class="btn primary" id="addit">Add to cart</button>
-            <button class="btn" id="close">Close</button>
-          </div>
-        </div>
-      `;
-
-      modal.appendChild(box);
-      document.body.appendChild(modal);
-
-      const closeModal = () => {
-        modal.remove();
-        document.body.style.overflow = "";
-      };
-
-      document.getElementById("close").addEventListener("click", closeModal);
-      modal.addEventListener("click", e => { if (e.target === modal) closeModal(); });
-      document.addEventListener("keydown", e => { if(e.key==="Escape") closeModal(); }, { once:true });
-
-      document.getElementById("addit").addEventListener("click", () => {
-        const people = Number(document.getElementById("people").value) || 1;
-        const loc = document.getElementById("loc").value || "Kinamba, Naivasha";
-        const note = document.getElementById("note").value || "";
-
-        addToCart(meal.id, meal.name, meal.price, people, {
-          signature: JSON.stringify({ people, loc }),
-          note, people, location: loc
-        });
-
-        closeModal();
-      });
-    }
-
-    const menuToggle = document.querySelector('.menu-toggle');
+<script src="js/cart.js"></script>
+<script>
+const menuToggle = document.querySelector('.menu-toggle');
 const navMenu = document.getElementById('navMenu');
 menuToggle.addEventListener('click', () => navMenu.classList.toggle('active'));
 
@@ -304,6 +256,7 @@ document.getElementById('menu-search').addEventListener('input', e=>{
 
 // Initial render
 renderMenu();
-  </script>
+</script>
 </body>
 </html>
+
