@@ -1,6 +1,6 @@
 {
   "name": "La Dosha Hotel",
-  "short_name": "LaDosha",
+  "short_name": "La Dosha Hotel",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
