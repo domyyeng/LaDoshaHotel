@@ -5,7 +5,10 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>About — La Dosha Hotel</title>
   <link rel="stylesheet" href="css/style.css" />
-  
+  <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#ff8800">
+
+
   <!-- Favicon -->
 <link rel="icon" type="image/png" href="assets/images/ladoshalogo.png" />
 <link rel="shortcut icon" href="assets/images/ladoshalogo.png" type="image/png" />
@@ -181,6 +184,20 @@ function toggleDetails(btn){
 
 
 </script>
+
+  <!-- Your other scripts -->
+  <script src="js/cart.js"></script>
+
+  <!-- Service Worker registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(() => console.log('Service Worker registered'));
+    }
+  </script>
+</body>
+</html>
+
 
 </body>
 </html>

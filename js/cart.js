@@ -1,5 +1,5 @@
 /* =======================================================
-   La Dosha Hotel — Cart Module (Enhanced with Images & Details)
+   La Dosha Hotel — Cart Module (Cleaned & Simplified)
    ======================================================= */
 
 const STORAGE_KEY = 'ladosha_cart_v2';
@@ -13,7 +13,6 @@ const getCart = () => {
   }
 };
 
-/* ---------- Save & Update ---------- */
 const saveCart = (cart) => {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
   renderCart();
@@ -25,14 +24,10 @@ const saveCart = (cart) => {
 function showToast(msg) {
   const toast = document.getElementById('toast');
   if (!toast) return;
-  
+
   toast.textContent = msg;
   toast.classList.add('show');
-
-  // Hide after 2.5s
-  setTimeout(() => {
-    toast.classList.remove('show');
-  }, 2500);
+  setTimeout(() => toast.classList.remove('show'), 2500);
 }
 
 /* ---------- Cart Operations ---------- */
@@ -45,7 +40,7 @@ const addToCart = (id, name, price, qty = 1, opts = {}) => {
 
   if (found) {
     found.qty += qty;
-    found.note = opts.note || found.note;
+    if (opts.note) found.note = opts.note; // overwrite note if provided
   } else {
     cart.push({
       id,
@@ -54,9 +49,6 @@ const addToCart = (id, name, price, qty = 1, opts = {}) => {
       qty,
       signature: sig,
       note: opts.note || '',
-      location: opts.location || 'Kinamba, Naivasha',
-      people: opts.people || 1,
-      deliveryType: opts.deliveryType || 'Delivery',
       offer: opts.offer || '',
       img: opts.img || 'assets/images/placeholder.png'
     });
@@ -70,6 +62,13 @@ const changeQty = (i, q) => {
   const cart = getCart();
   if (!cart[i]) return;
   cart[i].qty = Number(q) || 1;
+  saveCart(cart);
+};
+
+const updateNote = (i, note) => {
+  const cart = getCart();
+  if (!cart[i]) return;
+  cart[i].note = note;
   saveCart(cart);
 };
 
@@ -101,19 +100,24 @@ const renderCart = () => {
   }
 
   area.innerHTML = cart.map((it, idx) => `
-    <div class="cart-row" style="display:flex;align-items:center;gap:16px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #eee">
+    <div class="cart-row" style="display:flex;align-items:flex-start;gap:16px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #eee">
       <img src="${it.img}" alt="${it.name}" style="width:80px;height:80px;object-fit:cover;border-radius:8px"/>
       <div style="flex:1">
         <strong>${it.name}</strong>
-        <div style="font-size:13px;color:#555">Note: ${it.note || '-'}</div>
-        <div style="font-size:13px;color:#555">Location: ${it.location} • People: ${it.people}</div>
-        <div style="font-size:13px;color:#555">Delivery: ${it.deliveryType}</div>
+        <div style="margin-top:6px">
+          <label style="font-size:13px;color:#555">Note:</label>
+          <input type="text" value="${it.note || ''}" 
+                 placeholder="Add instructions..."
+                 onchange="updateNote(${idx}, this.value)"
+                 style="width:100%;padding:6px;border:1px solid #ccc;border-radius:6px;font-size:13px"/>
+        </div>
         ${it.offer ? `<div style="font-size:13px;color:green">Offer: ${it.offer}</div>` : ''}
       </div>
-      <div style="display:flex;align-items:center;gap:8px">
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
         <input type="number" min="1" value="${it.qty}" 
-               onchange="changeQty(${idx},this.value)" style="width:70px"/>
-        <div style="width:120px;text-align:right">KES ${it.qty * it.price}</div>
+               onchange="changeQty(${idx},this.value)" 
+               style="width:70px;text-align:center"/>
+        <div style="font-size:14px">KES ${it.qty * it.price}</div>
         <button class="btn" onclick="removeItem(${idx})">Remove</button>
       </div>
     </div>
