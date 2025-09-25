@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Home — La Dosha Hotel</title>
   <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Favicon -->
+<link rel="icon" type="image/png" href="assets/images/ladoshalogo.png" />
+<link rel="shortcut icon" href="assets/images/ladoshalogo.png" type="image/png" />
+
   <style>
     /* ===== Reset & Base ===== */
     body {
@@ -72,9 +77,19 @@
       border-radius: 2px;
       transition: 0.3s;
     }
-    .main-nav.active { display: flex; flex-direction: column; gap: 10px; position: absolute; top: 60px; right: 20px; background: #fff; padding: 15px 20px; border-radius: 10px; box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+    .main-nav.active {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: absolute;
+      top: 60px;
+      right: 20px;
+      background: #fff;
+      padding: 15px 20px;
+      border-radius: 10px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
 
-    
     /* ===== Hero Section ===== */
     .menu-hero-wrapper {
       display: flex;
@@ -123,15 +138,15 @@
 
     .menu-story {
       margin-top: 15px;
-      font-size: 1rem;
-      color: #333;
-      font-style: italic;
-      max-width: 500px;
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: #222;
+      word-wrap: 0.5rem; /* spacing between characters */
+      max-width: 800px;
       opacity: 0;
       transform: translateY(20px);
       animation: slideUp 1s forwards;
       animation-delay: 1.5s;
-      line-height: 1.5;
     }
 
     .hero-contact {
@@ -185,7 +200,7 @@
     @media(max-width:768px){
       #menu-button { font-size:2rem; padding:25px 50px; }
       .menu-subtitle { font-size:1.1rem; }
-      .menu-story { font-size:0.95rem; max-width: 300px; }
+      .menu-story { font-size:1rem; letter-spacing: 0.3rem; }
       .main-nav { display: none; flex-direction: column; }
       .menu-toggle { display: flex; }
       .main-nav.active { display: flex; }
@@ -193,10 +208,42 @@
   </style>
 </head>
 <body>
+<script>
+  // Load preloader.html into the page
+  fetch("preloader.html")
+    .then(response => response.text())
+    .then(data => {
+      document.body.insertAdjacentHTML("afterbegin", data);
+      document.body.style.overflow = "hidden"; // prevent scroll while loading
+
+      // ✅ Ensure preloader disappears when everything is ready
+      window.addEventListener("load", () => {
+        const preloader = document.getElementById("preloader");
+        if (preloader) {
+          preloader.classList.add("fade-out");
+          setTimeout(() => preloader.remove(), 600); // remove after fade
+        }
+        document.body.style.overflow = "auto"; // restore scroll
+      });
+
+      // ✅ Safety timeout (in case load never fires, e.g., with cached assets)
+      setTimeout(() => {
+        const preloader = document.getElementById("preloader");
+        if (preloader) {
+          preloader.classList.add("fade-out");
+          setTimeout(() => preloader.remove(), 600);
+          document.body.style.overflow = "auto";
+        }
+      }, 5000); // force remove after 5 seconds
+    });
+</script>
+
 
 <header class="site-header">
   <div class="container header-inner">
-    <div class="logo"><a href="index.html"><img src="assets/images/ladoshalogo.png" alt="La Dosha Hotel Logo" /></a></div>
+    <div class="logo">
+      <a href="index.html"><img src="assets/images/ladoshalogo.png" alt="La Dosha Hotel Logo" /></a>
+    </div>
     <nav class="main-nav" id="navMenu">
       <a href="index.html">Home</a>
       <a href="menu.html">Menu</a>
@@ -216,23 +263,30 @@
   <div class="menu-hero-wrapper">
     <div class="animated-bullet">Now Serving • Kinamba, Naivasha</div>
     <h1 class="hype">La Dosha Hotel</h1>
-    <div class="hero-subtitle">Opened August 2025</div>
+    <div class="hero-subtitle">Fast Food Hotel</div>
 
     <!-- Main Menu Button -->
     <a href="menu.html" id="menu-button" class="menu-button" role="button" aria-label="Open Menu">
-      OUR MENU
+      OPEN MENU
     </a>
-    <span class="menu-subtitle">
-      Delicious & Fresh • Curated for You
-    </span>
-    <p class="menu-story" id="menu-story">
-      We are more than food—we are your partner in taste, comfort, and unforgettable moments. Every dish tells a story, and this is where yours begins.
-    </p>
+    <span class="menu-subtitle">You Order, We Deliver.</span>
+
+    <!-- Current Time Clock -->
+    <p class="menu-story" id="clock"></p>
+    <script>
+      function updateClock() {
+        const now = new Date();
+        const options = { weekday: 'long', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+        document.getElementById("clock").textContent = now.toLocaleTimeString([], options);
+      }
+      setInterval(updateClock, 1000);
+      updateClock();
+    </script>
 
     <!-- Contact Info -->
     <div class="hero-contact">
       Email: <a href="mailto:ladoshahotel@gmail.com">ladoshahotel@gmail.com</a> • 
-      Phone: <a href="tel:+254715665770">0715665770</a>
+      Phone: <a href="tel:+254715665770">+254 715 665 770</a>
     </div>
   </div>
 </main>
@@ -240,43 +294,16 @@
 <footer class="footer">
   <div class="container">
     <p>&copy; 2025 La Dosha Hotel. All Rights Reserved.</p>
-    <p>Designed to delight your taste & experience.</p>
+    <p>You Order We Deliver</p>
   </div>
 </footer>
 
 <script src="js/cart.js"></script>
 <script>
-  function addCustomToCart(id, btn){
-  const card = btn.closest('.menu-item.card');
-  const meal = fullMenu.find(m=>m.id===id);
-  const qty = Number(card.querySelector('.quantity-box input').value);
-  addToCart('meal-'+id, meal.name, meal.price, qty, {img: meal.img});
-  showToast(`${meal.name} x${qty} added to cart`);
-}
   // Hamburger toggle
   const menuToggle = document.querySelector('.menu-toggle');
   const navMenu = document.getElementById('navMenu');
   menuToggle.addEventListener('click', () => navMenu.classList.toggle('active'));
-
-  // Word-by-word story reveal
-  const storyEl = document.getElementById('menu-story');
-  const storyText = storyEl.textContent;
-  storyEl.textContent = '';
-  const words = storyText.split(' ');
-  words.forEach((word, i) => {
-    const span = document.createElement('span');
-    span.textContent = word + ' ';
-    span.style.opacity = 0;
-    span.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
-    span.style.display = 'inline-block';
-    span.style.transform = 'translateY(10px)';
-    storyEl.appendChild(span);
-    setTimeout(() => {
-      span.style.opacity = 1;
-      span.style.transform = 'translateY(0)';
-    }, i * 150);
-  });
 </script>
-
 </body>
 </html>

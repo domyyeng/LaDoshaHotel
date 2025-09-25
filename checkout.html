@@ -6,6 +6,10 @@
   <title>Checkout — La Dosha Hotel</title>
   <link rel="stylesheet" href="css/style.css"/>
 
+  <!-- Favicon -->
+<link rel="icon" type="image/png" href="assets/images/ladoshalogo.png" />
+<link rel="shortcut icon" href="assets/images/ladoshalogo.png" type="image/png" />
+
   <style>
     h1 {
       text-align: center;
@@ -86,6 +90,36 @@
   </style>
 </head>
 <body>
+  <script>
+  // Load preloader.html into the page
+  fetch("preloader.html")
+    .then(response => response.text())
+    .then(data => {
+      document.body.insertAdjacentHTML("afterbegin", data);
+      document.body.style.overflow = "hidden"; // prevent scroll while loading
+
+      // ✅ Ensure preloader disappears when everything is ready
+      window.addEventListener("load", () => {
+        const preloader = document.getElementById("preloader");
+        if (preloader) {
+          preloader.classList.add("fade-out");
+          setTimeout(() => preloader.remove(), 600); // remove after fade
+        }
+        document.body.style.overflow = "auto"; // restore scroll
+      });
+
+      // ✅ Safety timeout (in case load never fires, e.g., with cached assets)
+      setTimeout(() => {
+        const preloader = document.getElementById("preloader");
+        if (preloader) {
+          preloader.classList.add("fade-out");
+          setTimeout(() => preloader.remove(), 600);
+          document.body.style.overflow = "auto";
+        }
+      }, 5000); // force remove after 5 seconds
+    });
+</script>
+
   <!-- ================= HEADER ================= -->
 <header class="site-header">
   <div class="container header-inner">
