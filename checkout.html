@@ -1,14 +1,14 @@
-<!doctype html>
+<!doctype html> 
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Checkout — La Dosha Hotel</title>
   <link rel="stylesheet" href="css/style.css"/>
 
   <!-- Favicon -->
-<link rel="icon" type="image/png" href="assets/images/ladoshalogo.png" />
-<link rel="shortcut icon" href="assets/images/ladoshalogo.png" type="image/png" />
+  <link rel="icon" type="image/png" href="assets/images/ladoshalogo.png" />
+  <link rel="shortcut icon" href="assets/images/ladoshalogo.png" type="image/png" />
 
   <style>
     h1 {
@@ -87,96 +87,102 @@
       text-decoration: none;
       color: #000;
     }
+
+    /* Modal for order options */
+    .modal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.4s ease;
+      z-index: 9999;
+    }
+    .modal-content {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      transform: scale(0.7);
+      animation: popIn 0.4s forwards ease;
+    }
+    .modal button {
+      margin: 10px;
+      padding: 12px 18px;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+    .email-btn { background: #d93025; color: #fff; }
+    .sms-btn { background: #34a853; color: #fff; }
+    .wa-btn { background: #25D366; color: #fff; }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes popIn { to { transform: scale(1); } }
+
+    /* Thank you screen */
+    #thankYou {
+      display: none;
+      text-align: center;
+      margin-top: 40px;
+      animation: fadeIn 0.5s ease;
+    }
+    #thankYou h2 {
+      color: #28a745;
+      font-size: 24px;
+    }
+    #thankYou p {
+      font-size: 16px;
+      margin: 10px 0 20px;
+    }
+    #thankYou a {
+      display: inline-block;
+      padding: 10px 16px;
+      background: #007bff;
+      color: #fff;
+      border-radius: 8px;
+      text-decoration: none;
+    }
   </style>
 </head>
 <body>
-  <script>
-  // Load preloader.html into the page
-  fetch("preloader.html")
-    .then(response => response.text())
-    .then(data => {
-      document.body.insertAdjacentHTML("afterbegin", data);
-      document.body.style.overflow = "hidden"; // prevent scroll while loading
-
-      // ✅ Ensure preloader disappears when everything is ready
-      window.addEventListener("load", () => {
-        const preloader = document.getElementById("preloader");
-        if (preloader) {
-          preloader.classList.add("fade-out");
-          setTimeout(() => preloader.remove(), 600); // remove after fade
-        }
-        document.body.style.overflow = "auto"; // restore scroll
-      });
-
-      // ✅ Safety timeout (in case load never fires, e.g., with cached assets)
-      setTimeout(() => {
-        const preloader = document.getElementById("preloader");
-        if (preloader) {
-          preloader.classList.add("fade-out");
-          setTimeout(() => preloader.remove(), 600);
-          document.body.style.overflow = "auto";
-        }
-      }, 5000); // force remove after 5 seconds
-    });
-</script>
-
   <!-- ================= HEADER ================= -->
-<header class="site-header">
-  <div class="container header-inner">
-    <!-- Logo -->
-    <div class="logo">
-      <a href="index.html">
-        <img src="assets/images/ladoshalogo.png"
-             alt="La Dosha Hotel Logo"
-             style="height:50px; width:auto; vertical-align:middle;" />
-      </a>
+  <header class="site-header">
+    <div class="container header-inner">
+      <!-- Logo -->
+      <div class="logo">
+        <a href="index.html">
+          <img src="assets/images/ladoshalogo.png"
+               alt="La Dosha Hotel Logo"
+               style="height:50px; width:auto; vertical-align:middle;" />
+        </a>
+      </div>
+      <button class="menu-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="main-nav" id="navMenu">
+        <a href="index.html">Home</a>
+        <a href="menu.html">Menu</a>
+        <a href="explore.html">Explore</a>
+        <a href="about.html">About</a>
+        <a href="destinations.html">Destination</a>
+      </nav>
     </div>
-
-    <!-- Mobile menu toggle (hamburger) -->
-    <button class="menu-toggle" aria-label="Toggle menu">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-
-    <!-- Navigation -->
-    <nav class="main-nav" id="navMenu">
-      <a href="index.html">Home</a>
-      <a href="menu.html">Menu</a>
-      <a href="explore.html">Explore</a>
-      <a href="about.html">About</a>
-      <a href="destinations.html">Destination</a>
-    </nav>
-  </div>
-</header>
-
-<script>
-  const menuToggle = document.querySelector('.menu-toggle');
-  const navMenu = document.getElementById('navMenu');
-
-  menuToggle.addEventListener('click', () => {
-    navMenu.classList.toggle('active');
-  });
-</script>
-
+  </header>
 
   <main class="container">
     <h1>Checkout</h1>
     <div id="order-summary" class="order-summary"></div>
 
     <form id="checkout-form" class="checkout-form">
-      <div class="form-group">
-        <label>Full Name</label>
-        <input required type="text" id="cust-name"/>
-      </div>
-      <div class="form-group">
-        <label>Phone Number</label>
-        <input required type="tel" id="cust-phone"/>
-      </div>
-      <div class="form-group">
-        <label>Email</label>
-        <input required type="email" id="cust-email"/>
-      </div>
+      <div class="form-group"><label>Full Name</label><input required type="text" id="cust-name"/></div>
+      <div class="form-group"><label>Phone Number</label><input required type="tel" id="cust-phone"/></div>
+      <div class="form-group"><label>Email</label><input required type="email" id="cust-email"/></div>
       <div class="form-group">
         <label>Delivery Location</label>
         <select id="cust-location" required onchange="toggleCustomLocation(this)">
@@ -192,161 +198,125 @@
         </select>
         <input type="text" id="custom-location" placeholder="Enter your location" style="display:none;margin-top:8px;"/>
       </div>
-      <div class="form-group">
-        <label>How many people?</label>
-        <input type="number" id="cust-people" min="1" value="1"/>
-      </div>
+      <div class="form-group"><label>How many people?</label><input type="number" id="cust-people" min="1" value="1"/></div>
       <h3>Payment Method</h3>
       <div class="form-group payment-options">
-        <label><input type="radio" name="payment" value="cod" checked/> Cash on Delivery</label>
-        <label><input type="radio" name="payment" value="mpesa"/> Pochi La Biashara</label>
-        <label><input type="radio" name="payment" value="card"/> Card (Demo)</label>
+        <label><input type="radio" name="payment" value="cash on delivery" checked/> Cash on Delivery</label>
+        <label><input type="radio" name="payment" value="Pochi"/> Pochi La Biashara</label>
+        <label><input type="radio" name="payment" value="card"/> Card</label>
       </div>
       <button id="checkout-btn" class="btn primary" type="submit">Order Now</button>
     </form>
+
+    <!-- Thank you -->
+    <div id="thankYou">
+      <h2>🎉 Thank you for your order!</h2>
+      <p>Your request has been prepared and is ready to be sent.</p>
+      <a href="index.html">Go Back Home</a>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="orderModal">
+      <div class="modal-content">
+        <h3>Send order via:</h3>
+        <button class="email-btn" id="sendEmail">📧 Email</button>
+        <button class="sms-btn" id="sendSMS">💬 SMS</button>
+        <button class="wa-btn" id="sendWA">🟢 WhatsApp</button>
+      </div>
+    </div>
 
     <div id="checkout-result"></div>
   </main>
 
   <!-- ================= FOOTER ================= -->
-<footer class="footer">
-  <div class="footer-top">
-    <div class="container footer-grid">
-      
-      <!-- About -->
-      <div class="footer-col">
-        <h4>La Dosha Hotel</h4>
-        <p>La Dosha Hotel brings you a fine dining experience with online ordering, 
-          fast delivery, and luxury hospitality. Our goal is to make every meal memorable.</p>
-      </div>
-
-      <!-- Quick Links -->
-      <div class="footer-col">
-        <h4>Quick Links</h4>
-        <ul>
-          <li><a href="menu.html">Menu</a></li>
-          <li><a href="explore.html">Explore</a></li>
-          <li><a href="about.html">About Us</a></li>
-          <li><a href="destinations.html">Destinations</a></li>
-          <li><a href="contact.html">Contact</a></li>
-        </ul>
-      </div>
-
-      <!-- Customer Service -->
-      <div class="footer-col">
-        <h4>Customer Service</h4>
-        <ul>
-          <li><a href="destinations.html">Destination</a></li>
-          <li><a href="cart.html">How to Order</a></li>
-          <li><a href="checkout.html">Payment Options</a></li>
-          <li><a href="index.html">Terms & Conditions</a></li>
-          <li><a href="index.html">Privacy Policy</a></li>
-        </ul>
-      </div>
-
-      <!-- Contact -->
-      <div class="footer-col">
-        <h4>Get in Touch</h4>
-        <p><strong>Phone:</strong> +254 715 665 770</p>
-        <p><strong>Email:</strong> ladoshahotel@gmail.com</p>
-        <div class="social-links">
-          <a href="https://www.facebook.com/ladoshahotel/"><img src="assets/icons/facebook.png" alt="Facebook"></a>
-          <a href="#"><img src="assets/icons/instagram.png" alt="Instagram"></a>
-          <a href="#"><img src="assets/icons/x.png" alt="X"></a>
-          <a href="#"><img src="assets/icons/youtube.png" alt="YouTube"></a>
-        </div>
-      </div>
-
-    </div>
-  </div>
-  
-  <div class="footer-bottom">
-    <div class="container">
-      <p>&copy; 2025 La Dosha Hotel. All Rights Reserved.</p>
-    </div>
-  </div>
-</footer>
+  <footer class="footer">… your footer code here …</footer>
 
   <script src="js/cart.js"></script>
   <script>
     const summaryDiv = document.getElementById('order-summary');
     const checkoutBtn = document.getElementById('checkout-btn');
+    const form = document.getElementById('checkout-form');
+    const thankYou = document.getElementById('thankYou');
+    const modal = document.getElementById('orderModal');
+    const sendEmail = document.getElementById('sendEmail');
+    const sendSMS = document.getElementById('sendSMS');
+    const sendWA = document.getElementById('sendWA');
 
     function toggleCustomLocation(select) {
       const customInput = document.getElementById('custom-location');
-      if (select.value === "other") {
-        customInput.style.display = "block";
-        customInput.required = true;
-      } else {
-        customInput.style.display = "none";
-        customInput.required = false;
-        customInput.value = "";
-      }
+      if (select.value === "other") { customInput.style.display = "block"; customInput.required = true; }
+      else { customInput.style.display = "none"; customInput.required = false; customInput.value = ""; }
     }
 
     function renderSummary() {
       const items = getCartItems();
-      if (items.length === 0) {
-        summaryDiv.innerHTML = "<p>Your cart is empty.</p>";
-        return;
-      }
+      if (items.length === 0) { summaryDiv.innerHTML = "<p>Your cart is empty.</p>"; return; }
       let html = "<h3>Your Order</h3>";
       items.forEach(item => {
-        html += `
-          <div class="order-item">
-            <img src="${item.img}" alt="${item.name}"/>
-            <div>
-              <strong>${item.name}</strong>
-              Qty: ${item.qty} × KES ${item.price}<br/>
-              <strong>KES ${item.qty * item.price}</strong>
-            </div>
-          </div>`;
+        html += `<div class="order-item"><img src="${item.img}" alt="${item.name}"/><div>
+          <strong>${item.name}</strong> Qty: ${item.qty} × KES ${item.price}<br/><strong>KES ${item.qty * item.price}</strong></div></div>`;
       });
       html += `<p><strong>Total: KES ${getCartTotal()}</strong></p>`;
       summaryDiv.innerHTML = html;
     }
-    renderSummary();
-    updateCounts();
+    renderSummary(); updateCounts();
 
-    document.querySelectorAll('input[name="payment"]').forEach(radio => {
-      radio.addEventListener('change', () => {
-        checkoutBtn.textContent = radio.value === "cod" ? "Order Now" : "Checkout & Pay";
-      });
-    });
+    function getDateTime() {
+      const now = new Date();
+      return now.toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+    }
 
-    document.getElementById('checkout-form').addEventListener('submit', function(e){
-      e.preventDefault();
+    function getOrderDetails() {
       const name = document.getElementById('cust-name').value.trim();
       const phone = document.getElementById('cust-phone').value.trim();
       const email = document.getElementById('cust-email').value.trim();
       let location = document.getElementById('cust-location').value;
-      if(location === "other") {
-        location = document.getElementById('custom-location').value.trim();
-      }
+      if (location === "other") location = document.getElementById('custom-location').value.trim();
       const people = Number(document.getElementById('cust-people').value) || 1;
       const payment = document.querySelector('input[name="payment"]:checked').value;
 
-      if (!name || !phone || !location) {
-        alert("Please fill in all required fields.");
-        return;
-      }
+      let message = "🛎️ New Order — La Dosha Hotel\n\n";
+      message += "Order Date: " + getDateTime() + "\n\n";
+      message += `Name: ${name}\nPhone: ${phone}\nEmail: ${email}\nLocation: ${location}\nPeople: ${people}\nPayment: ${payment}\n\n`;
 
-      const order = { customer: { name, phone, email, location, people }, payment, items: getCartItems(), total: getCartTotal() };
+      const items = getCartItems();
+      items.forEach(item => { message += `${item.name} — Qty: ${item.qty} × KES ${item.price} = KES ${item.qty * item.price}\n`; });
+      message += `\nTOTAL: KES ${getCartTotal()}`;
 
-      document.getElementById('checkout-result').innerHTML = `
-        <div class="card">
-          <h3>🎉 Thank you, ${order.customer.name}!</h3>
-          <p>Your order total is <strong>KES ${order.total}</strong>.</p>
-          <p>Payment Method: <strong>${payment.toUpperCase()}</strong></p>
-          <p>We’ll contact you at <strong>${phone}</strong> to deliver to <strong>${location}</strong>.</p>
-          <a href="index.html" class="btn secondary">Go Home</a>
-        </div>
-      `;
+      return encodeURIComponent(message);
+    }
 
-      clearCart();
-      renderSummary();
-      updateCounts();
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      modal.style.display = 'flex';
     });
+
+    function showThankYou() {
+      form.style.display = "none";
+      modal.style.display = "none";
+      thankYou.style.display = "block";
+      clearCart(); renderSummary(); updateCounts();
+    }
+
+    sendEmail.addEventListener('click', () => {
+      const body = getOrderDetails();
+      window.location.href = `mailto:ladoshahotel@gmail.com?subject=New Order&body=${body}`;
+      showThankYou();
+    });
+
+    sendSMS.addEventListener('click', () => {
+      const body = getOrderDetails();
+      window.location.href = `sms:+254715665770?body=${body}`;
+      showThankYou();
+    });
+
+    sendWA.addEventListener('click', () => {
+      const body = getOrderDetails();
+      window.open(`https://wa.me/254715665770?text=${body}`, "_blank");
+      showThankYou();
+    });
+
+    window.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; }
   </script>
 </body>
 </html>
