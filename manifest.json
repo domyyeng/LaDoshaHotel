@@ -7,7 +7,7 @@
   "theme_color": "#ff8800",
   "icons": [
     {
-      "src": "assets/images/ladoshalogo.png",
+      "src": "assets/images/ladoshaicon.png",
       "sizes": "192x192",
       "type": "image/png"
     }
