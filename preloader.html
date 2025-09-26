@@ -1,11 +1,145 @@
 <!-- preloader.html -->
 <div id="preloader">
+  <canvas id="preloader-canvas"></canvas>
   <div class="preloader-content">
-    <div class="spinner"></div>
-    <p>Loading La Dosha Hotel...</p>
+    <div class="spinner-wrapper">
+      <img src="assets/images/ladoshaicon.png" alt="La Dosha Icon" class="spinner-logo">
+      <canvas id="halo-canvas"></canvas>
+    </div>
+    <div class="hotel-name">Loading</div>
   </div>
 </div>
 
 <style>
+  #preloader {
+    position: fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background: #0a0a0a;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index: 10000;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  #preloader::before {
+    content:'';
+    position:absolute;
+    top:0; left:0;
+    width:100%; height:100%;
+    background: linear-gradient(120deg, #0a0a0a, #1a0a00, #0a0a0a);
+    animation: bgGradient 8s ease-in-out infinite alternate;
+    z-index: 0;
+  }
+
+  @keyframes bgGradient {
+    0% { background: linear-gradient(120deg, #0a0a0a, #1a0a00, #0a0a0a); }
+    50% { background: linear-gradient(120deg, #1a0a00, #0a0a0a, #1a0a00); }
+    100% { background: linear-gradient(120deg, #0a0a0a, #1a0a00, #0a0a0a); }
+  }
+
+  #preloader-canvas {
+    position: absolute;
+    top:0; left:0;
+    width:100%;
+    height:100%;
+    z-index: 1;
+  }
+
+  .preloader-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    z-index: 2;
+    position: relative;
+  }
+
+  .spinner-wrapper {
+    position: relative;
+    width: 100px;
+    height: 100px;
+  }
+
   
+  .spinner-logo {
+    position: absolute;
+    top:0; left:0;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 100px;
+    animation: logoPulse 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes logoPulse {
+    0% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.9; }
+    50% { transform: translate(-50%, -50%) scale(1.05); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.9; }
+  }
+
+  #halo-canvas {
+    position: absolute;
+    top:0; left:0;
+    width:100%; height:100%;
+    pointer-events: none;
+  }
+
+  .hotel-name {
+    font-size: 36px;
+    font-weight: 900;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(90deg, #ff8800, #ffd700, #ff8800);
+    background-size: 200% auto;
+    color: #fff;
+    text-transform: uppercase;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 2.5s linear infinite, pulse 1.5s ease-in-out infinite alternate;
+    letter-spacing: 2px;
+  }
+
+  @keyframes shimmer { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
+  @keyframes pulse { 0% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(1); opacity: 0.8; } }
+
+  #preloader.fade-out { animation: fadeOut 0.6s forwards; }
+  @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
 </style>
+
+<script>
+  // Background floating particles
+  const canvas = document.getElementById('preloader-canvas');
+  const ctx = canvas.getContext('2d');
+  let w = canvas.width = window.innerWidth;
+  let h = canvas.height = window.innerHeight;
+  window.addEventListener('resize', ()=>{ w=canvas.width=window.innerWidth; h=canvas.height=window.innerHeight; });
+
+  class Particle { 
+    constructor(){ this.reset(); }
+    reset(){ this.x=Math.random()*w; this.y=Math.random()*h; this.size=Math.random()*2+1; this.speed=Math.random()*0.5+0.2; this.angle=Math.random()*2*Math.PI; this.color=`rgba(255,${180+Math.random()*75},0,${0.5+Math.random()*0.5})`; this.history=[]; }
+    update(){ this.x+=Math.cos(this.angle)*this.speed; this.y+=Math.sin(this.angle)*this.speed; this.history.push({x:this.x,y:this.y}); if(this.history.length>8) this.history.shift(); if(this.x<0||this.x>w||this.y<0||this.y>h) this.reset(); }
+    draw(){ for(let i=0;i<this.history.length;i++){ const p=this.history[i]; ctx.beginPath(); ctx.arc(p.x,p.y,this.size*(i/this.history.length),0,Math.PI*2); ctx.fillStyle=this.color.replace(/[\d\.]+\)$/,'0.'+(i/this.history.length)+')'); ctx.fill(); } }
+  }
+  const particles=[]; for(let i=0;i<100;i++) particles.push(new Particle());
+  function animate(){ ctx.clearRect(0,0,w,h); particles.forEach(p=>{p.update();p.draw();}); requestAnimationFrame(animate); }
+  animate();
+
+  // Halo particles around spinner/logo
+  const haloCanvas = document.getElementById('halo-canvas');
+  const hctx = haloCanvas.getContext('2d');
+  let hw = haloCanvas.width = haloCanvas.offsetWidth;
+  let hh = haloCanvas.height = haloCanvas.offsetHeight;
+  window.addEventListener('resize', ()=>{ hw=haloCanvas.width=haloCanvas.offsetWidth; hh=haloCanvas.height=haloCanvas.offsetHeight; });
+
+  class HaloParticle {
+    constructor(){ this.reset(); }
+    reset(){ this.angle=Math.random()*Math.PI*2; this.radius=45 + Math.random()*15; this.speed=0.02 + Math.random()*0.02; this.size=1+Math.random()*2; this.opacity=Math.random()*0.7 + 0.3; }
+    update(){ this.angle+=this.speed; }
+    draw(){ const x=hw/2+Math.cos(this.angle)*this.radius; const y=hh/2+Math.sin(this.angle)*this.radius; hctx.beginPath(); hctx.arc(x,y,this.size,0,Math.PI*2); hctx.fillStyle=`rgba(255,215,0,${this.opacity})`; hctx.fill(); }
+  }
+
+  const haloParticles=[]; for(let i=0;i<40;i++) haloParticles.push(new HaloParticle());
+  function haloAnimate(){ hctx.clearRect(0,0,hw,hh); haloParticles.forEach(p=>{p.update();p.draw();}); requestAnimationFrame(haloAnimate); }
+  haloAnimate();
+</script>
