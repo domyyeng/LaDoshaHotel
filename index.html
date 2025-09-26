@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Home — La Dosha Hotel</title>
   <link rel="stylesheet" href="css/style.css" />
+  <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#ff8800">
+
 
   <!-- Favicon -->
 <link rel="icon" type="image/png" href="assets/images/ladoshalogo.png" />
@@ -305,5 +308,17 @@
   const navMenu = document.getElementById('navMenu');
   menuToggle.addEventListener('click', () => navMenu.classList.toggle('active'));
 </script>
+  <!-- Your other scripts -->
+  <script src="js/cart.js"></script>
+
+  <!-- Service Worker registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(() => console.log('Service Worker registered'));
+    }
+  </script>
+</body>
+</html>
 </body>
 </html>

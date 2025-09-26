@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Explore — La Dosha Hotel</title>
   <link rel="stylesheet" href="css/style.css" />
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#ff8800">
 
   <!-- Favicon -->
 <link rel="icon" type="image/png" href="assets/images/ladoshalogo.png" />
@@ -339,5 +341,17 @@ document.getElementById('menu-search').addEventListener('input', e=>{
 // Initial render
 renderMenu();
   </script>
+  <!-- Your other scripts -->
+  <script src="js/cart.js"></script>
+
+  <!-- Service Worker registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(() => console.log('Service Worker registered'));
+    }
+  </script>
+</body>
+</html>
 </body>
 </html>
