@@ -253,7 +253,7 @@
   const navMenu = document.getElementById('navMenu');
   menuToggle.addEventListener('click', () => navMenu.classList.toggle('active'));
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js')
+    navigator.serviceWorker.register('service-worker.js')
       .then(() => console.log('Service Worker registered'));
   }
 </script>
@@ -394,6 +394,44 @@ if ("serviceWorker" in navigator) {
   // Run once at startup
   updateOnlineStatus();
 </script>
+
+<!-- Mobile install app data -->
+<script>
+  let deferredPrompt;
+  const installBtn = document.createElement("button");
+  installBtn.innerText = "📲 Install La Dosha App";
+  installBtn.style.position = "fixed";
+  installBtn.style.bottom = "20px";
+  installBtn.style.right = "20px";
+  installBtn.style.padding = "12px 20px";
+  installBtn.style.background = "#ff5500";
+  installBtn.style.color = "#fff";
+  installBtn.style.border = "none";
+  installBtn.style.borderRadius = "10px";
+  installBtn.style.fontSize = "16px";
+  installBtn.style.fontWeight = "bold";
+  installBtn.style.boxShadow = "0 4px 10px rgba(0,0,0,0.2)";
+  installBtn.style.cursor = "pointer";
+  installBtn.style.display = "none"; // hidden until available
+  document.body.appendChild(installBtn);
+
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    installBtn.style.display = "block"; // show button on phones
+  });
+
+  installBtn.addEventListener("click", async () => {
+    installBtn.style.display = "none";
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log("User choice:", outcome);
+      deferredPrompt = null;
+    }
+  });
+</script>
+
 
 
 </body>
