@@ -77,6 +77,68 @@
     .hero-contact { margin-top: 25px; font-size: 0.95rem; text-align: center; }
     .hero-contact a { color: #333; font-weight: 500; }
 
+    /* ===== Live Game Section ===== */
+    .live-game {
+      margin: 40px auto;
+      padding: 25px;
+      max-width: 600px;
+      text-align: center;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      animation: pulseGlow 2s infinite;
+      margin-top: 20px;
+      position: sticky;
+      top: 100px; /* stays below header */
+      z-index: 5;
+    }
+    .live-indicator {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      color: #e60000;
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+    }
+    .live-indicator .dot {
+      width: 12px;
+      height: 12px;
+      background: #e60000;
+      border-radius: 50%;
+      margin-right: 8px;
+      animation: blink 1s infinite;
+    }
+    .live-desc {
+      font-size: 1.1rem;
+      color: #333;
+      margin-bottom: 15px;
+    }
+    .live-btn {
+      display: inline-block;
+      padding: 12px 25px;
+      font-weight: bold;
+      font-size: 1.1rem;
+      background: linear-gradient(135deg, #ff8800, #ff5500);
+      color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease, background 0.3s ease;
+    }
+    .live-btn:hover {
+      transform: scale(1.05);
+      background: linear-gradient(135deg, #ff9933, #ff3300);
+    }
+    @keyframes blink {
+      0%, 50%, 100% { opacity: 1; }
+      25%, 75% { opacity: 0; }
+    }
+    @keyframes pulseGlow {
+      0% { box-shadow: 0 0 10px rgba(255,0,0,0.3); }
+      50% { box-shadow: 0 0 25px rgba(255,0,0,0.6); }
+      100% { box-shadow: 0 0 10px rgba(255,0,0,0.3); }
+    }
+
     /* ===== Animations ===== */
     @keyframes blowUp { 0% { transform: scale(0); opacity:0; } 60% { transform: scale(1.2); opacity:1; } 80% { transform: scale(0.95); } 100% { transform: scale(1); } }
     @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -167,6 +229,15 @@
       Phone: <a href="tel:+254715665770">+254 715 665 770</a>
     </div>
   </div>
+
+  <!-- 🔴 Live Game Section -->
+  <section class="live-game">
+    <div class="live-indicator">
+      <span class="dot"></span> Live Game Ongoing
+    </div>
+    <p class="live-desc">Spin the wheel now and order a surprise meal!</p>
+    <a href="game.html" class="live-btn">Join Game</a>
+  </section>
 </main>
 
 <footer class="footer">
@@ -267,7 +338,6 @@ window.addEventListener('appinstalled', () => {
   console.log('App installed successfully!');
 });
 </script>
-
 
 </body>
 </html>

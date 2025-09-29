@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game La Dosha Hotel</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#ff8800">
+  <link rel="icon" type="image/png" href="assets/images/ladoshalogo.png" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: radial-gradient(circle, #4a148c, #12005e);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      padding-top: 100px;
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* ===== Header ===== */
+    .site-header {
+      position: fixed;
+      top: 0; width: 100%;
+      background: rgba(255,255,255,0.95);
+      z-index: 10;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .site-header .container {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 20px;
+    }
+    .logo img { height:50px; }
+    .main-nav { display: flex; gap: 20px; }
+    .main-nav a { font-weight: 500; color: #333; }
+    .main-nav a:hover { color: #ff8800; }
+    .menu-toggle { display: none; flex-direction: column; width: 25px; height: 18px; border: none; background: none; cursor: pointer; }
+    .menu-toggle span { height: 3px; background: #333; border-radius: 2px; margin-bottom: 4px; }
+    .main-nav.active { display: flex; flex-direction: column; gap: 10px; position: absolute; top: 60px; right: 20px; background: #fff; padding: 15px 20px; border-radius: 10px; }
+
+    /* ===== Spin Wheel ===== */
+    .wheel-container {
+      position: relative;
+      width: 90vmin; height: 90vmin;
+      max-width: 500px; max-height: 500px;
+      margin: 40px auto;
+    }
+    canvas { width: 100%; height: 100%; border-radius: 50%; }
+    #spinButton {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: gold;
+      border: 3px solid #fff; border-radius: 50%;
+      padding: 20px 30px;
+      font-size: 18px; font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(0,0,0,0.6), inset 0 0 10px rgba(255,255,255,0.6);
+    }
+    .pointer {
+      position: absolute; top: -15px; left: 50%;
+      transform: translateX(-50%);
+      width: 0; height: 0;
+      border-left: 20px solid transparent; border-right: 20px solid transparent;
+      border-bottom: 30px solid red;
+    }
+
+    /* ===== Popup ===== */
+    .popup {
+      display: none; position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      justify-content: center; align-items: center;
+      z-index: 100;
+    }
+    .popup-content {
+      background: #fff; padding: 20px;
+      border-radius: 12px; text-align: center;
+      width: 80%; max-width: 350px;
+    }
+    .popup h2 { margin-bottom: 20px; }
+    .popup button {
+      margin: 10px; padding: 10px 20px;
+      border: none; border-radius: 8px;
+      cursor: pointer; font-size: 16px;
+    }
+    .try-again { background: #4caf50; color: #fff; }
+    .order { background: #2196f3; color: #fff; }
+
+    /* ===== Live Players ===== */
+    .live-players {
+      background: rgba(255,255,255,0.1);
+      margin: 20px auto; padding: 15px;
+      border-radius: 12px; max-width: 500px;
+      text-align: center; color: #fff;
+    }
+    .players-list { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
+    .players-list span {
+      background: rgba(0,0,0,0.3);
+      padding: 6px 10px; border-radius: 8px;
+      animation: fadeSlideIn 0.5s ease forwards;
+    }
+
+    /* ===== Winner & Join Popups ===== */
+    .winner-popup, .join-popup {
+      position: fixed; bottom: 20px; left: 20px;
+      background: #fff; padding: 12px 16px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      font-size: 14px; font-weight: bold;
+      display: none; z-index: 200;
+      animation: fadeSlideIn 0.5s ease forwards;
+    }
+
+    @keyframes fadeSlideIn {
+      0% { opacity: 0; transform: translateX(-20px); }
+      100% { opacity: 1; transform: translateX(0); }
+    }
+
+    /* ===== Footer ===== */
+    .footer { background: #222; color: #fff; padding: 30px 20px; text-align: center; margin-top: auto; }
+
+    .disclaimer { font-size: 12px; margin-top: 10px; color: #ccc; }
+
+    @media(max-width:768px){
+      .main-nav { display: none; }
+      .menu-toggle { display: flex; }
+    }
+  </style>
+</head>
+<body>
+<header class="site-header">
+  <div class="container header-inner">
+    <div class="logo"><a href="index.html">
+      <img src="assets/images/ladoshalogo.png" alt="La Dosha Hotel" />
+    </a>
+  </div>
+    <nav class="main-nav" id="navMenu">
+      <a href="index.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="explore.html">Explore</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="destinations.html">Destination</a>
+    </nav>
+    <button class="menu-toggle"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<main>
+  <h1 style="text-align:center; color:#fff; margin-bottom:10px;">
+    <p class="disclaimer">
+      ⚠️ Meals won are not free. It’s just a fun random pick to help you decide
+    </h1>
+  
+  <div class="wheel-container">
+    <div class="pointer"></div>
+    <canvas id="wheel"></canvas>
+    <button id="spinButton">SPIN</button>
+  </div>
+
+  <div class="live-players">
+    <h3>🔥 Live Players Right Now</h3>
+    <div class="players-list" id="playersList"></div>
+    
+  </div>
+</main>
+
+<footer class="footer"><p>&copy; 2025 La Dosha Hotel. All Rights Reserved.</p><p>You Order We Deliver</p></footer>
+
+<!-- Result Popup -->
+<div class="popup" id="popup">
+  <div class="popup-content">
+    <h2 id="mealName"></h2>
+    <button class="try-again" onclick="closePopup()">Try Again</button>
+    <button class="order" onclick="goToMenu()">Order Meal</button>
+  </div>
+</div>
+
+<!-- Winner & Join Popups -->
+<div class="winner-popup" id="winnerPopup"></div>
+<div class="join-popup" id="joinPopup"></div>
+
+<script>
+  // ===== Navigation Toggle =====
+  document.querySelector('.menu-toggle').addEventListener('click', () => {
+    document.getElementById('navMenu').classList.toggle('active');
+  });
+</script>
+
+<script>
+  // ===== Sounds =====
+  const spinSound = new Audio("assets/sounds/spin.wav");
+  const winSound = new Audio("assets/sounds/win.flac");
+  const popSound = new Audio("assets/sounds/popup.mp3");
+
+  // ===== Confetti =====
+  function launchConfetti() {
+    const duration = 2 * 1000;
+    const end = Date.now() + duration;
+    (function frame() {
+      const colors = ["#bb0000", "#ffffff", "#00bb00", "#0000bb", "#ffbb00"];
+      for (let i = 0; i < 5; i++) {
+        const confetti = document.createElement("div");
+        confetti.style.position = "fixed";
+        confetti.style.width = "10px"; confetti.style.height = "10px";
+        confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.left = Math.random() * 100 + "vw";
+        confetti.style.top = "-10px";
+        confetti.style.opacity = 0.8;
+        confetti.style.animation = `fall ${Math.random()*3+2}s linear forwards`;
+        document.body.appendChild(confetti);
+        setTimeout(()=>confetti.remove(), 4000);
+      }
+      if (Date.now() < end) requestAnimationFrame(frame);
+    })();
+  }
+</script>
+
+<style>
+@keyframes fall {
+  to { transform: translateY(100vh) rotate(720deg); }
+}
+</style>
+
+<script>
+  // ===== Wheel Logic =====
+  const canvas = document.getElementById("wheel");
+  const ctx = canvas.getContext("2d");
+  const meals = [
+    { name: "Chips", color: "#f44336" },
+    { name: "Chips Masala", color: "#ff9800" },
+    { name: "Milk Tea", color: "#ffeb3b" },
+    { name: "Chapati", color: "#4caf50" },
+    { name: "Mukimo", color: "#2196f3" },
+    { name: "Black Tea", color: "#9c27b0" },
+    { name: "Maandazi", color: "#009688" },
+    { name: "Eggs", color: "#e91e63" }
+  ];
+  let startAngle = 0, arc = (2 * Math.PI) / meals.length, spinTimeout=null;
+  let spinAngleStart=0, spinTime=0, spinTimeTotal=0;
+
+  function drawRouletteWheel() {
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+    const outsideRadius = canvas.width/2 - 10, textRadius = outsideRadius - 40, insideRadius = 30;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.strokeStyle="white"; ctx.lineWidth=2; ctx.font="bold 16px Arial";
+    for (let i=0;i<meals.length;i++){
+      const angle=startAngle+i*arc;
+      ctx.fillStyle=meals[i].color;
+      ctx.beginPath();
+      ctx.arc(canvas.width/2,canvas.height/2,outsideRadius,angle,angle+arc,false);
+      ctx.arc(canvas.width/2,canvas.height/2,insideRadius,angle+arc,angle,true);
+      ctx.fill();
+      ctx.save();
+      ctx.fillStyle="black";
+      ctx.translate(canvas.width/2+Math.cos(angle+arc/2)*textRadius,canvas.height/2+Math.sin(angle+arc/2)*textRadius);
+      ctx.rotate(angle+arc/2);
+      ctx.fillText(meals[i].name,-ctx.measureText(meals[i].name).width/2,0);
+      ctx.restore();
+    }
+  }
+  function rotateWheel(){
+    spinTime+=30;
+    if(spinTime>=spinTimeTotal){ stopRotateWheel(); return; }
+    const spinAngle=spinAngleStart - easeOut(spinTime,0,spinAngleStart,spinTimeTotal);
+    startAngle+=(spinAngle*Math.PI)/180; drawRouletteWheel();
+    spinTimeout=setTimeout(rotateWheel,30);
+  }
+  function stopRotateWheel(){
+    clearTimeout(spinTimeout);
+    const degrees=(startAngle*180)/Math.PI+90;
+    const arcd=(arc*180)/Math.PI;
+    const index=Math.floor((360-(degrees%360))/arcd)%meals.length;
+    const selectedMeal=meals[index];
+    document.getElementById("mealName").innerText="You got: "+selectedMeal.name;
+    document.getElementById("popup").style.display="flex";
+    winSound.play();
+    launchConfetti();
+  }
+  function easeOut(t,b,c,d){ const ts=(t/=d)*t, tc=ts*t; return b+c*(tc+-3*ts+3*t); }
+  document.getElementById("spinButton").addEventListener("click",()=>{
+    spinAngleStart=Math.random()*360+360; spinTime=0; spinTimeTotal=Math.random()*3000+4000;
+    spinSound.play(); rotateWheel();
+  });
+  function closePopup(){ document.getElementById("popup").style.display="none"; }
+  function goToMenu(){ window.location.href="menu.html"; }
+  drawRouletteWheel(); window.addEventListener("resize",drawRouletteWheel);
+</script>
+
+<script>
+  // ===== Live Players & Fake Events =====
+  const kenyanNames=["Achieng","Otieno","Wanjiku","Mwangi","Chebet","Mutiso","Atieno","Barasa","Kiptoo","Wairimu","Omondi","Kibet","Njeri","Were","Njenga","Makena","Nyambura","Waweru","Oduor","Muthoni"];
+  function randomName(){ return kenyanNames[Math.floor(Math.random()*kenyanNames.length)]; }
+
+  function addPlayer(){
+    const list=document.getElementById("playersList");
+    const span=document.createElement("span");
+    span.textContent=randomName()+" just joined the game 🎮";
+    list.prepend(span);
+    if(list.children.length>15){ list.removeChild(list.lastChild); }
+    showJoinPopup(span.textContent);
+  }
+  for(let i=0;i<5;i++) addPlayer();
+  setInterval(addPlayer,7000);
+
+  function showJoinPopup(msg){
+    const joinPopup=document.getElementById("joinPopup");
+    joinPopup.textContent=msg; joinPopup.style.display="block";
+    popSound.play();
+    setTimeout(()=>{ joinPopup.style.display="none"; },4000);
+  }
+
+  function showWinner(){
+    const meal=meals[Math.floor(Math.random()*meals.length)].name;
+    const msg=randomName()+" just won "+meal+" 🎉";
+    const popup=document.getElementById("winnerPopup");
+    popup.textContent=msg; popup.style.display="block";
+    popSound.play();
+    setTimeout(()=>{ popup.style.display="none"; },4000);
+  }
+  setInterval(showWinner,12000);
+</script>
+</body>
+</html>
