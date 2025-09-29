@@ -339,5 +339,62 @@ window.addEventListener('appinstalled', () => {
 });
 </script>
 
+<!-- Service-worker to make the app fully support offline use -->
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/service-worker.js")
+    .then(() => console.log("✅ Service Worker registered"))
+    .catch(err => console.error("SW registration failed:", err));
+}
+</script>
+
+
+<!-- A pop up to notify one that they are offline -->
+<div id="offline-notice">
+  ⚠️ You are offline. Some features may be limited.
+</div>
+
+<style>
+  #offline-notice {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ff4444;
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    z-index: 9999;
+    animation: fadeInOut 0.5s ease;
+  }
+
+  @keyframes fadeInOut {
+    from { opacity: 0; transform: translate(-50%, 20px); }
+    to   { opacity: 1; transform: translate(-50%, 0); }
+  }
+</style>
+
+<script>
+  // Show popup when offline, hide when back online
+  function updateOnlineStatus() {
+    const notice = document.getElementById("offline-notice");
+    if (navigator.onLine) {
+      notice.style.display = "none";
+    } else {
+      notice.style.display = "block";
+    }
+  }
+
+  window.addEventListener("online", updateOnlineStatus);
+  window.addEventListener("offline", updateOnlineStatus);
+
+  // Run once at startup
+  updateOnlineStatus();
+</script>
+
+
 </body>
 </html>
