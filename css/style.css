@@ -570,47 +570,6 @@ html, body {
   .hero-right { margin-top: 20px; }
 }
 
-/* =======================================================
-   Meal of the Day (🔥 Highlight)
-======================================================= */
-.meal-of-day {
-  margin: 40px auto;
-  padding: 30px;
-  background: linear-gradient(145deg, #fffaf3, #fff);
-  border-radius: 16px;
-  box-shadow: var(--shadow-lg);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  align-items: center;
-}
-.meal-of-day .text { flex: 1; min-width: 280px; }
-.meal-of-day h2 {
-  font-size: 28px;
-  font-weight: 900;
-  color: var(--brand);
-  margin-bottom: 10px;
-}
-.meal-of-day p {
-  color: var(--muted);
-  margin-bottom: 16px;
-}
-.meal-of-day .btn.primary {
-  font-size: 16px;
-  padding: 12px 20px;
-}
-.meal-of-day .image { flex: 1; text-align: center; }
-.meal-of-day .image img {
-  max-width: 340px;
-  width: 100%;
-  border-radius: 12px;
-  box-shadow: var(--shadow-md);
-  transition: var(--transition);
-}
-.meal-of-day .image img:hover {
-  transform: scale(1.05) rotate(-1deg);
-  box-shadow: var(--shadow-lg);
-}
 
 /* =======================================================
    Cards, Menu & Gallery
@@ -745,6 +704,23 @@ html, body {
 
 
 /* =======================================================
-   Gallery Spin the Wheel
+   Menu Containers
 ======================================================= */
+
+#menu-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+  padding: 14px;
+}
+
+/* Mobile: 2 items side by side */
+@media (max-width: 600px) {
+  #menu-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .card img {
+    height: 120px; /* slightly smaller for mobile */
+  }
+}
 

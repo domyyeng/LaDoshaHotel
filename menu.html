@@ -14,7 +14,34 @@
     .filters button.active { background:#111; color:#fff; }
     .search-box { text-align:center; margin:10px; }
     .search-box input { padding:8px; width:80%; max-width:320px; border-radius:6px; border:1px solid #ccc; }
-    #menu-container { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; padding:14px; }
+    
+  /* Menu */
+    #menu-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+  padding: 14px;
+}
+
+/* Mobile: 2 items side by side */
+@media (max-width: 600px) {
+  #menu-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .card img {
+    width: 100%;
+    aspect-ratio: 1 / 1;  /* Makes the image a square */
+    object-fit: cover;     /* Ensures the image fills the square without distortion */
+    border-radius: 8px;
+  }
+  .card {
+    padding: 8px; /* optional: reduce padding for mobile */
+  }
+}
+
+
+}
+
     .card { background:#fff; border-radius:10px; padding:12px; box-shadow:0 2px 6px rgba(0,0,0,0.08); text-align:center; }
     .card img { width:100%; height:140px; object-fit:cover; border-radius:8px; }
     .card h4 { margin:10px 0 4px; font-size:17px; }
@@ -198,15 +225,24 @@
 <script>
   // ------------------ MENU DATA ------------------
   const fullMenu = [
-    {id:1, name:'Chips', price:100, img:'assets/images/chips.jpg', category:'snacks', inStock:true},
-    {id:2, name:'Chips Masala', price:130, img:'assets/images/chips_masala.jpg', category:'snacks', inStock:true},
-    {id:3, name:'Fried Eggs (pair)', price:60, img:'assets/images/fried_eggs.jpg', category:'breakfast', inStock:true},
-    {id:4, name:'Milk Tea', price:20, img:'assets/images/milk_tea.jpg', category:'drinks', inStock:true}, 
-    {id:5, name:'Chapati', price:30, img:'assets/images/chapati.jpg', category:'breakfast', inStock:true},
-    {id:6, name:'Mandazi', price:20, img:'assets/images/mandazi.jpg', category:'snacks', inStock:false}, 
-    {id:7, name:'Githeri', price:50, img:'assets/images/githeri.jpg', category:'main', inStock:false},
-    {id:8, name:'Mukimo', price:100, img:'assets/images/mukimo.jpg', category:'main', inStock:false}
-  ];
+  {id:1, name:'Chips', price:100, img:'assets/images/chips.jpg', category:'snacks', inStock:true},
+  {id:2, name:'Chips Masala', price:130, img:'assets/images/chips_masala.jpg', category:'snacks', inStock:true},
+  {id:3, name:'Fried Eggs (pair)', price:60, img:'assets/images/fried_eggs.jpg', category:'breakfast', inStock:true},
+  {id:4, name:'Omlette (pair)', price:80, img:'assets/images/omelette.jpg', category:'breakfast', inStock:true},
+  {id:5, name:'boiled Eggs (pair)', price:60, img:'assets/images/boiledeggs.jpg', category:'breakfast', inStock:true},
+  {id:6, name:'Milk Tea', price:20, img:'assets/images/milk_tea.jpg', category:'drinks', inStock:true},
+  {id:7, name:'Black Tea/Coffee', price:30, img:'assets/images/blacktea.jpg', category:'drinks', inStock:true}, 
+  {id:8, name:'Chapati', price:30, img:'assets/images/chapati.jpg', category:'breakfast', inStock:true},
+  {id:9, name:'Mandazi', price:20, img:'assets/images/mandazi.jpg', category:'snacks', inStock:false}, 
+  {id:10, name:'Plain Rice', price:60, img:'assets/images/plainrice.jpg', category:'main', inStock:false},
+  {id:11, name:'Chapo Beans', price:90, img:'assets/images/chapobeans.webp', category:'main', inStock:false},
+  {id:12, name:'Chapo Dengu', price:100, img:'assets/images/chapodengu.jpg', category:'main', inStock:false},
+  {id:13, name:'Chapo Minji', price:90, img:'assets/images/chapominji.webp', category:'main', inStock:false},
+  {id:14, name:'Bhajia', price:100, img:'assets/images/bhajia.jpg', category:'snacks', inStock:false},
+  {id:15, name:'Githeri', price:50, img:'assets/images/githeri.jpg', category:'main', inStock:false},
+  {id:16, name:'Mukimo', price:100, img:'assets/images/mukimo.jpg', category:'main', inStock:false}
+];
+
 
   let currentFilter = 'all';
   const menuContainer = document.getElementById('menu-container');
