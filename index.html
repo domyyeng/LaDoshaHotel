@@ -334,6 +334,70 @@
   </section>
 </main>
 
+<!-- SOCIAL MEDIA SECTION ABOVE FOOTER -->
+<div id="social-media-section">
+  <div id="facebook-bar">
+    <a href="https://www.facebook.com/ladoshahotel" target="_blank" class="facebook-link">
+      <img src="assets/Social Media Platforms/facebook-screenshot.jpg" alt="Facebook Screenshot">
+    </a>  
+  </div>
+
+  <div id="tiktok-bar">
+    <a href="https://www.tiktok.com/@ladoshahotel" target="_blank" class="tiktok-link">
+      <img src="assets/Social Media Platforms/tiktok-screenshot.jpg" alt="TikTok Screenshot">
+    </a>
+  </div>
+</div>
+
+<style>
+  /* Container above footer */
+  #social-media-section {
+    display: flex;
+    justify-content: space-between; /* Facebook left, TikTok right */
+    align-items: center;
+    padding: 20px 40px; 
+    background-color: #111;
+    max-width: 1200px; /* optional: keeps content from stretching too much */
+    margin: 0 auto;     /* centers container on ultra-wide screens */
+  }
+
+  /* Links and images */
+  .facebook-link img, .tiktok-link img {
+    width: 180px; 
+    height: auto;
+    border-radius: 12px;
+    object-fit: cover;
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+  }
+
+  .facebook-link img:hover, .tiktok-link img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 1024px) {
+    .facebook-link img, .tiktok-link img {
+      width: 160px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .facebook-link img, .tiktok-link img {
+      width: 140px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .facebook-link img, .tiktok-link img {
+      width: 110px;
+    }
+  }
+</style>
+
+
+
 <footer class="footer">
   <div class="container">
     <p>&copy; 2025 La Dosha Hotel. All Rights Reserved.</p>
