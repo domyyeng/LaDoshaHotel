@@ -3,11 +3,12 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Menu — La Dosha Hotel</title>
+  <title>Menu La Dosha Hotel</title>
   <link rel="stylesheet" href="css/style.css"/>
   <style>
     body { font-family: Arial, sans-serif; margin:0; background:#fafafa; }
     header { background:#111; color:#fff; padding:12px 20px; text-align:center; font-size:20px; }
+    footer { background:#111; color:#fff; text-align:center; padding:18px; margin-top:30px; }
     .filters { display:flex; gap:8px; justify-content:center; margin:12px; flex-wrap:wrap; }
     .filters button { padding:6px 14px; border:none; border-radius:6px; background:#eee; cursor:pointer; }
     .filters button.active { background:#111; color:#fff; }
@@ -21,10 +22,156 @@
     .btn { padding:8px 14px; border:none; border-radius:8px; cursor:pointer; }
     .btn.primary { background:#111; color:#fff; }
     .btn[disabled] { background:#ccc; cursor:not-allowed; }
+    .cart-float {
+      position:fixed;
+      bottom:20px;
+      right:20px;
+      background:#111;
+      color:#fff;
+      padding:12px 16px;
+      border-radius:50px;
+      text-decoration:none;
+      font-size:16px;
+      display:flex;
+      align-items:center;
+      box-shadow:0 4px 12px rgba(0,0,0,0.25);
+    }
+    .cart-count {
+      background:red;
+      color:#fff;
+      font-size:12px;
+      padding:2px 6px;
+      border-radius:50%;
+      margin-left:6px;
+    }
+    .toast {
+      position:fixed;
+      bottom:80px;
+      right:20px;
+      background:#111;
+      color:#fff;
+      padding:10px 16px;
+      border-radius:8px;
+      opacity:0;
+      transition:opacity 0.4s ease;
+      z-index:1000;
+    }
+    .toast.show { opacity:1; }
   </style>
 </head>
 <body>
-  <header>La Dosha Menu</header>
+  <!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <!-- Logo -->
+    <div class="logo">
+      <a href="index.html">
+        <img src="assets/images/ladoshalogo.png" alt="La Dosha Hotel Logo" />
+      </a>
+    </div>
+
+    <!-- Nav Menu -->
+    <nav class="main-nav" id="navMenu">
+      <a href="index.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="explore.html">Explore</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="destinations.html">Destination</a>
+    </nav>
+
+    <!-- Cart + Hamburger -->
+    <div class="header-actions">
+      <a href="cart.html" class="cart-float">🛒 <span id="cart-count" class="cart-count">0</span></a>
+      <button class="menu-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- TOAST -->
+<div id="toast" class="toast"></div>
+
+<style>
+  .site-header {
+    position: fixed;
+    top: 0; width: 100%;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    z-index: 1000;
+  }
+  .header-inner {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 20px;
+  }
+  .logo img { height: 50px; width: auto; }
+  .main-nav { display: flex; gap: 20px; }
+  .main-nav a { color: #333; font-weight: 500; transition: color 0.3s; }
+  .main-nav a:hover { color: #ff8800; }
+  .header-actions { display: flex; align-items: center; gap: 10px; }
+
+  /* Hamburger */
+  .menu-toggle {
+    display: none;
+    flex-direction: column; justify-content: space-between;
+    width: 25px; height: 18px;
+    background: none; border: none; cursor: pointer;
+  }
+  .menu-toggle span {
+    display: block;
+    height: 3px; background: #333; border-radius: 2px;
+  }
+
+  /* Mobile Menu (animated) */
+  @media (max-width: 768px) {
+    .main-nav {
+      display: flex;
+      flex-direction: column;
+      position: absolute; top: 60px; right: 20px;
+      background: #fff;
+      padding: 15px 20px;
+      border-radius: 10px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+      opacity: 0;
+      transform: translateY(-15px);
+      pointer-events: none;
+      transition: all 0.3s ease;
+    }
+    .main-nav.active {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .menu-toggle { display: flex; }
+  }
+</style>
+
+<script>
+  const menuToggle = document.querySelector('.menu-toggle');
+  const navMenu = document.getElementById('navMenu');
+  const navLinks = navMenu.querySelectorAll('a');
+
+  // Toggle open/close
+  menuToggle.addEventListener('click', () => {
+    navMenu.classList.toggle('active');
+  });
+
+  // Close menu when a link is clicked
+  navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      navMenu.classList.remove('active');
+    });
+  });
+
+  // Optional: close if you click outside menu
+  document.addEventListener('click', (e) => {
+    if (!navMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+      navMenu.classList.remove('active');
+    }
+  });
+</script>
+
 
   <!-- category filters -->
   <div class="filters">
@@ -43,6 +190,11 @@
   <!-- menu grid -->
   <div id="menu-container"></div>
 
+  <!-- FOOTER -->
+  <footer>
+    <p>&copy; 2025 La Dosha Hotel — All Rights Reserved</p>
+  </footer>
+
 <script>
   // ------------------ MENU DATA ------------------
   const fullMenu = [
@@ -51,13 +203,15 @@
     {id:3, name:'Fried Eggs (pair)', price:60, img:'assets/images/fried_eggs.jpg', category:'breakfast', inStock:true},
     {id:4, name:'Milk Tea', price:20, img:'assets/images/milk_tea.jpg', category:'drinks', inStock:true}, 
     {id:5, name:'Chapati', price:30, img:'assets/images/chapati.jpg', category:'breakfast', inStock:true},
-    {id:6, name:'Mandazi', price:20, img:'assets/images/mandazi.jpg', category:'snacks', inStock:false}, // OUT OF STOCK
-    {id:7, name:'Githeri', price:50, img:'assets/images/githeri.jpg', category:'main', inStock:false}, // OUT OF STOCK
-    {id:8, name:'Mukimo', price:100, img:'assets/images/mukimo.jpg', category:'main', inStock:false} // OUT OF STOCK
+    {id:6, name:'Mandazi', price:20, img:'assets/images/mandazi.jpg', category:'snacks', inStock:false}, 
+    {id:7, name:'Githeri', price:50, img:'assets/images/githeri.jpg', category:'main', inStock:false},
+    {id:8, name:'Mukimo', price:100, img:'assets/images/mukimo.jpg', category:'main', inStock:false}
   ];
 
   let currentFilter = 'all';
   const menuContainer = document.getElementById('menu-container');
+  const cartCount = document.getElementById('cart-count');
+  const toast = document.getElementById('toast');
 
   // ------------------ RENDER MENU ------------------
   function renderMenu(filter='all', search=''){
@@ -75,20 +229,7 @@
           <img src="${m.img}" alt="${m.name}"/>
           <h4>${m.name}</h4>
           <div class="price">KES ${m.price}</div>
-          <div style="margin-top:6px">
-            <input type="text" placeholder="Special instructions..." 
-                   onchange="this.closest('.menu-item.card').dataset.note=this.value"
-                   style="width:100%;padding:6px;border:1px solid #ccc;border-radius:6px;font-size:13px"/>
-          </div>
-          <button class="btn primary" onclick="
-            addToCart(
-              'meal-${m.id}',
-              '${m.name}',
-              ${m.price},
-              1,
-              { img:'${m.img}', note:this.closest('.menu-item.card').dataset.note || '' }
-            )
-          ">Add to Cart</button>
+          <button class="btn primary" onclick="addToCart('meal-${m.id}','${m.name}',${m.price},1,{img:'${m.img}',note:''})">Add to Cart</button>
         `;
       } else {
         card.innerHTML=`
@@ -104,10 +245,32 @@
     });
   }
 
-  // ------------------ CART ------------------
-  function addToCart(id,name,price,qty,extra){
-    alert(name + " added to cart ✅");
-    // integrate with cart.js here
+  // ------------------ CART FUNCTIONS ------------------
+  function addToCart(id, name, price, qty, extra) {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    let existing = cart.find(item => item.id === id);
+    if (existing) {
+      existing.qty += qty;
+    } else {
+      cart.push({ id, name, price, qty, img: extra.img, note: extra.note });
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    updateCartCount();
+    showToast(name + " added to cart ✅");
+  }
+
+  function updateCartCount() {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let total = cart.reduce((sum, item) => sum + item.qty, 0);
+    cartCount.textContent = total;
+  }
+
+  function showToast(msg){
+    toast.textContent = msg;
+    toast.classList.add("show");
+    setTimeout(()=>toast.classList.remove("show"), 2000);
   }
 
   // ------------------ FILTER ------------------
@@ -120,6 +283,7 @@
 
   // ------------------ INIT ------------------
   renderMenu();
+  updateCartCount();
 </script>
 </body>
 </html>

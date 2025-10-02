@@ -187,11 +187,17 @@
     });
 </script>
 
+<!-- HEADER -->
 <header class="site-header">
-  <div class="container header-inner">
+  <div class="header-inner">
+    <!-- Logo -->
     <div class="logo">
-      <a href="index.html"><img src="assets/images/ladoshalogo.png" alt="La Dosha Hotel Logo" /></a>
+      <a href="index.html">
+        <img src="assets/images/ladoshalogo.png" alt="La Dosha Hotel Logo" />
+      </a>
     </div>
+
+    <!-- Nav Menu -->
     <nav class="main-nav" id="navMenu">
       <a href="index.html">Home</a>
       <a href="menu.html">Menu</a>
@@ -200,12 +206,100 @@
       <a href="contact.html">Contact</a>
       <a href="destinations.html">Destination</a>
     </nav>
-    <button class="menu-toggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+
+    <!-- Cart + Hamburger -->
+    <div class="header-actions">
+      <a href="cart.html" class="cart-float">🛒 <span id="cart-count" class="cart-count">0</span></a>
+      <button class="menu-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </div>
 </header>
 
-<a href="cart.html" class="cart-float">🛒 <span id="cart-count" class="cart-count">0</span></a>
+<!-- TOAST -->
 <div id="toast" class="toast"></div>
+
+<style>
+  .site-header {
+    position: fixed;
+    top: 0; width: 100%;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    z-index: 1000;
+  }
+  .header-inner {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 20px;
+  }
+  .logo img { height: 50px; width: auto; }
+  .main-nav { display: flex; gap: 20px; }
+  .main-nav a { color: #333; font-weight: 500; transition: color 0.3s; }
+  .main-nav a:hover { color: #ff8800; }
+  .header-actions { display: flex; align-items: center; gap: 10px; }
+
+  /* Hamburger */
+  .menu-toggle {
+    display: none;
+    flex-direction: column; justify-content: space-between;
+    width: 25px; height: 18px;
+    background: none; border: none; cursor: pointer;
+  }
+  .menu-toggle span {
+    display: block;
+    height: 3px; background: #333; border-radius: 2px;
+  }
+
+  /* Mobile Menu (animated) */
+  @media (max-width: 768px) {
+    .main-nav {
+      display: flex;
+      flex-direction: column;
+      position: absolute; top: 60px; right: 20px;
+      background: #fff;
+      padding: 15px 20px;
+      border-radius: 10px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+      opacity: 0;
+      transform: translateY(-15px);
+      pointer-events: none;
+      transition: all 0.3s ease;
+    }
+    .main-nav.active {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .menu-toggle { display: flex; }
+  }
+</style>
+
+<script>
+  const menuToggle = document.querySelector('.menu-toggle');
+  const navMenu = document.getElementById('navMenu');
+  const navLinks = navMenu.querySelectorAll('a');
+
+  // Toggle open/close
+  menuToggle.addEventListener('click', () => {
+    navMenu.classList.toggle('active');
+  });
+
+  // Close menu when a link is clicked
+  navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      navMenu.classList.remove('active');
+    });
+  });
+
+  // Optional: close if you click outside menu
+  document.addEventListener('click', (e) => {
+    if (!navMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+      navMenu.classList.remove('active');
+    }
+  });
+</script>
+
+
 
 <main class="container">
   <div class="menu-hero-wrapper">
@@ -247,7 +341,44 @@
   </div>
 </footer>
 
-<script src="js/cart.js"></script>
+<script>
+  // ------------------ CART FUNCTIONS ------------------
+  function addToCart(id, name, price, qty, extra) {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    let existing = cart.find(item => item.id === id);
+    if (existing) {
+      existing.qty += qty;
+    } else {
+      cart.push({ id, name, price, qty, img: extra?.img || "", note: extra?.note || "" });
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    updateCartCount();
+    showToast(name + " added to cart ✅");
+  }
+
+  function updateCartCount() {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let total = cart.reduce((sum, item) => sum + item.qty, 0);
+
+    // ✅ Make sure we target the cart-count element
+    const cartCount = document.getElementById("cart-count");
+    if (cartCount) cartCount.textContent = total;
+  }
+
+  function showToast(msg){
+    const toast = document.getElementById("toast");
+    toast.textContent = msg;
+    toast.classList.add("show");
+    setTimeout(()=>toast.classList.remove("show"), 2000);
+  }
+
+  // ✅ Run on page load so cart count is correct
+  document.addEventListener("DOMContentLoaded", updateCartCount);
+</script>
+
+
 <script>
   const menuToggle = document.querySelector('.menu-toggle');
   const navMenu = document.getElementById('navMenu');

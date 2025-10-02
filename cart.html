@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Cart La Dosha Hotel</title>
+  <title>Cart — La Dosha Hotel</title>
   <link rel="stylesheet" href="css/style.css" />
   <link rel="icon" type="image/png" href="assets/images/ladoshalogo.png" />
   <link rel="shortcut icon" href="assets/images/ladoshalogo.png" type="image/png" />
   <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#ff8800">
+  <meta name="theme-color" content="#ff8800">
 
   <style>
     body {
@@ -22,6 +22,7 @@
     }
     a { text-decoration: none; color: inherit; }
 
+    /* Header */
     .site-header { position: fixed; top: 0; width: 100%; background: rgba(255,255,255,0.95); z-index: 1000; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
     .site-header .container { display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; }
     .logo img { height:50px; width:auto; }
@@ -38,19 +39,30 @@
     }
     @keyframes slideDown { from { opacity:0; transform: translateY(-10px); } to { opacity:1; transform: translateY(0); } }
 
+    /* Cart Page */
     .cart-page { width: 95%; max-width: 900px; margin: 40px auto; background: #fff; padding: 30px 25px; border-radius: 14px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); overflow: hidden; }
 
-    .cart-row { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 16px 0; border-bottom: 1px solid #eee; opacity: 0; transform: translateY(20px); animation: fadeInUp 0.5s ease forwards; }
-    .cart-row:last-child { border-bottom: none; }
+    .cart-row { display: flex; flex-direction: column; gap: 10px; padding: 16px 0; border-bottom: 1px solid #eee; animation: fadeInUp 0.5s ease forwards; }
     @keyframes fadeInUp { to { opacity:1; transform: translateY(0); } }
 
-    .cart-item { display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0; }
+    .cart-item { display: flex; align-items: center; gap: 14px; }
     .cart-item img { width: 80px; height: 80px; object-fit: cover; border-radius: 10px; flex-shrink: 0; }
-    .cart-info { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+    .cart-info { display: flex; flex-direction: column; gap: 6px; min-width: 0; flex: 1; }
     .cart-info h4 { font-size: 17px; margin: 0; font-weight: 600; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-    .cart-price { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; min-width: 100px; flex-shrink: 0; }
+    .cart-price { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
     .cart-price span { font-weight: 700; font-size: 16px; color: #222; }
+
+    textarea.instructions {
+      width: 100%;
+      min-height: 50px;
+      resize: vertical;
+      font-size: 0.9rem;
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-top: 6px;
+    }
 
     .cart-summary { margin-top: 30px; padding: 20px; background: #fafafa; border: 1px solid #eee; border-radius: 10px; display: flex; flex-direction: column; gap: 14px; align-items: flex-end; }
     .cart-summary strong { font-size: 19px; color: #222; }
@@ -63,21 +75,11 @@
     .btn.secondary { background: #f0f0f0; color: #333; }
     .btn.secondary:hover { background: #ddd; }
 
-    @media (max-width: 768px) {
-      .cart-row { flex-direction: column; align-items: flex-start; padding: 16px; }
-      .cart-price { align-items: flex-start; width: 100%; }
-      .cart-summary { align-items: stretch; }
-    }
-
     .checkout-bar { display: none; }
     @media (max-width: 768px) {
       .checkout-bar { display: flex; justify-content: space-between; align-items: center; position: sticky; bottom: 0; background: #fff; padding: 12px 20px; border-top: 2px solid #ddd; box-shadow: 0 -4px 8px rgba(0,0,0,0.05); z-index: 1000; }
       .checkout-bar strong { font-size: 16px; }
     }
-
-    .btn.continue { display: inline-block; padding: 14px 28px; margin: 30px auto; background: #fff7f0; color: #ff8800; border: 2px solid #ff8800; border-radius: 30px; font-size: 1rem; font-weight: 600; text-transform: uppercase; cursor: pointer; transition: all 0.3s ease; animation: pulse 2.5s infinite; text-align: center; }
-    .btn.continue:hover { background: #ff8800; color: #fff; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255,136,0,0.3); }
-    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255,136,0,0.5); } 70% { box-shadow: 0 0 0 15px rgba(255,136,0,0); } 100% { box-shadow: 0 0 0 0 rgba(255,136,0,0); } }
 
     .footer { background: #222; color: #ddd; margin-top: auto; }
     .footer-top { padding: 30px 20px; }
@@ -92,24 +94,6 @@
   </style>
 </head>
 <body>
-<script>
-fetch("preloader.html")
-  .then(r=>r.text())
-  .then(data=>{
-    document.body.insertAdjacentHTML("afterbegin",data);
-    document.body.style.overflow="hidden";
-    window.addEventListener("load",()=>{
-      const pre=document.getElementById("preloader");
-      if(pre){ pre.classList.add("fade-out"); setTimeout(()=>pre.remove(),600);}
-      document.body.style.overflow="auto";
-    });
-    setTimeout(()=>{
-      const pre=document.getElementById("preloader");
-      if(pre){ pre.classList.add("fade-out"); setTimeout(()=>pre.remove(),600);}
-      document.body.style.overflow="auto";
-    },5000);
-  });
-</script>
 
 <header class="site-header">
   <div class="container header-inner">
@@ -127,16 +111,10 @@ fetch("preloader.html")
 </header>
 
 <main class="cart-page">
-  <p>Review your selected meals below. Adjust quantities or remove items as needed.</p>
+  <p>Review your selected meals below. Add any special instructions for each meal.</p>
   <div id="cart-contents"></div>
   <div id="cart-summary" class="cart-summary"></div>
 </main>
-
-<div class="btn.continue">
-  <div class="cart-actions">
-    <a href="menu.html" class="btn continue">← Continue Shopping</a>
-  </div>
-</div>
 
 <div class="checkout-bar">
   <strong>Total: <span id="mobile-total">KES 0</span></strong>
@@ -185,7 +163,6 @@ fetch("preloader.html")
   </div>
 </footer>
 
-<script src="js/cart.js"></script>
 <script>
 const menuToggle=document.querySelector('.menu-toggle');
 const navMenu=document.getElementById('navMenu');
@@ -212,12 +189,13 @@ function renderCart(){
     contents.innerHTML+=`
       <div class="cart-row">
         <div class="cart-item">
-          <img src="${item.image}" alt="${item.name}">
+          <img src="${item.img}" alt="${item.name}">
           <div class="cart-info">
             <h4>${item.name}</h4>
             <div>
               Qty: <input type="number" min="1" value="${item.qty}" style="width:50px" onchange="updateQty(${index}, this.value)">
             </div>
+            <textarea class="instructions" placeholder="Special instructions (e.g. no onions, extra spicy)" onchange="updateInstruction(${index}, this.value)">${item.instruction || ""}</textarea>
           </div>
         </div>
         <div class="cart-price">
@@ -247,6 +225,12 @@ function updateQty(index,newQty){
   renderCart();
 }
 
+function updateInstruction(index,text){
+  let cart=JSON.parse(localStorage.getItem('cart'))||[];
+  cart[index].instruction=text;
+  localStorage.setItem('cart',JSON.stringify(cart));
+}
+
 function removeFromCart(index){
   let cart=JSON.parse(localStorage.getItem('cart'))||[];
   cart.splice(index,1);
@@ -262,18 +246,11 @@ function clearCart(){
 document.addEventListener('DOMContentLoaded',renderCart);
 </script>
 
-  <!-- Your other scripts -->
-  <script src="js/cart.js"></script>
-
-  <!-- Service Worker registration -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js')
-        .then(() => console.log('Service Worker registered'));
-    }
-  </script>
-</body>
-</html>
-
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js')
+    .then(() => console.log('Service Worker registered'));
+}
+</script>
 </body>
 </html>

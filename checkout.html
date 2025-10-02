@@ -3,229 +3,220 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Checkout La Dosha Hotel</title>
+  <title>Checkout — La Dosha Hotel</title>
   <link rel="stylesheet" href="css/style.css"/>
   <link rel="icon" type="image/png" href="assets/images/ladoshalogo.png" />
-  <link rel="shortcut icon" href="assets/images/ladoshalogo.png" type="image/png" />
-  <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#ff8800">
-
+  <meta name="theme-color" content="#ff8800">
 
   <style>
-    h1 { text-align:center; margin:20px 0 30px; font-size:28px; font-weight:800; color:var(--brand); }
-    .order-summary { margin:20px 0; background:#fff; border-radius:12px; box-shadow:var(--shadow-sm); padding:20px; }
-    .order-item { display:flex; align-items:center; margin-bottom:14px; border-bottom:1px solid #f3f3f3; padding-bottom:10px; }
-    .order-item img { width:64px; height:64px; object-fit:cover; margin-right:12px; border-radius:8px; }
-    .order-item strong { display:block; margin-bottom:4px; }
-    .checkout-form { background:#fff; border-radius:12px; padding:20px; box-shadow:var(--shadow-sm); }
-    .form-group { margin-bottom:16px; }
-    label { font-weight:600; display:block; margin-bottom:6px; }
-    input, select { width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; font-size:15px; }
-    .payment-options label { font-weight:500; display:flex; align-items:center; gap:8px; margin-bottom:8px; }
-    #checkout-result .card { margin-top:20px; padding:20px; border-radius:12px; background:#fdfcf8; box-shadow:var(--shadow-md); }
-    .btn.primary { display:block; width:100%; padding:14px; font-size:16px; border-radius:10px; text-align:center; cursor:pointer; }
-    .btn.secondary { display:inline-block; margin-top:10px; padding:10px 16px; background:#ddd; border-radius:8px; text-decoration:none; color:#000; }
+    body { margin:0; font-family:sans-serif; background:#fafafa; padding-top:90px; }
+    a { text-decoration:none; color:inherit; }
+
+    /* Header */
+    .site-header { position:fixed; top:0; width:100%; background:#fff; box-shadow:0 2px 6px rgba(0,0,0,0.1); z-index:1000; }
+    .site-header .container { display:flex; justify-content:space-between; align-items:center; padding:12px 20px; }
+    .logo img { height:50px; }
+    .main-nav { display:flex; gap:20px; }
+    .main-nav a { font-weight:500; color:#333; }
+    .menu-toggle { display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; }
+    .menu-toggle span { width:25px; height:3px; background:#333; border-radius:2px; }
+    @media(max-width:768px){
+      .main-nav { display:none; flex-direction:column; position:absolute; top:60px; right:20px; background:#fff; padding:15px 20px; border-radius:10px; box-shadow:0 6px 20px rgba(0,0,0,0.15); }
+      .main-nav.active { display:flex; }
+      .menu-toggle { display:flex; }
+    }
+
+    main { max-width:900px; margin:30px auto; padding:20px; background:#fff; border-radius:12px; box-shadow:0 4px 14px rgba(0,0,0,0.08); }
+    h2 { margin-top:0; }
+
+    .order-item { display:flex; gap:12px; margin-bottom:12px; padding-bottom:12px; border-bottom:1px solid #eee; }
+    .order-item img { width:60px; height:60px; object-fit:cover; border-radius:8px; }
+    .order-item div { font-size:14px; }
+
+    form .form-group { margin-bottom:15px; }
+    label { display:block; margin-bottom:6px; font-weight:600; }
+    input, select { width:100%; padding:10px; border:1px solid #ccc; border-radius:8px; }
+    .payment-options { display:flex; gap:15px; flex-wrap:wrap; }
+    .payment-options label { font-weight:normal; }
+
+    .btn { padding:12px 20px; border:none; border-radius:30px; cursor:pointer; font-size:1rem; font-weight:600; }
+    .btn.primary { background:#ff8800; color:#fff; }
+    .btn.primary:hover { background:#e67600; }
+    .btn.secondary { background:#f0f0f0; }
+
+    .footer { background:#222; color:#ddd; margin-top:40px; text-align:center; padding:20px; }
+    .footer p { margin:5px 0; }
+
     /* Modal */
-    .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.6); display:flex; justify-content:center; align-items:center;
-      opacity:0; visibility:hidden; transition:opacity 0.3s ease, visibility 0.3s ease; z-index:1000; }
-    .modal-overlay.show { opacity:1; visibility:visible; }
-    .modal { background:#fff; border-radius:12px; padding:24px; max-width:320px; text-align:center; transform:translateY(-30px); transition:transform 0.3s ease; }
-    .modal-overlay.show .modal { transform:translateY(0); }
-    .modal h3 { margin-bottom:16px; font-size:18px; font-weight:700; }
-    .modal button { display:block; width:100%; margin:8px 0; padding:12px; border-radius:8px; font-size:16px; cursor:pointer; }
-    .btn-email { background:#4285F4; color:#fff; }
-    .btn-sms { background:#34B7F1; color:#fff; }
-    .btn-wa { background:#25D366; color:#fff; }
-    .btn-cancel { background:#ddd; }
+    .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); justify-content:center; align-items:center; z-index:2000; }
+    .modal-content { background:#fff; padding:20px; border-radius:12px; max-width:400px; text-align:center; }
+    .modal-content h3 { margin-top:0; }
+    .modal-content .btn { margin:8px 0; width:100%; }
   </style>
 </head>
 <body>
-  <!-- ================= HEADER ================= -->
-  <header class="site-header">
-    <div class="container header-inner">
-      <div class="logo">
-        <a href="index.html"><img src="assets/images/ladoshalogo.png" alt="La Dosha Hotel Logo" style="height:50px; width:auto;"/></a>
-      </div>
-      <button class="menu-toggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
-      <nav class="main-nav" id="navMenu">
-        <a href="index.html">Home</a>
-        <a href="menu.html">Menu</a>
-        <a href="explore.html">Explore</a>
-        <a href="about.html">About</a>
-        <a href="destinations.html">Destination</a>
-      </nav>
-    </div>
-  </header>
 
-  <main class="container">
-
-    <div style="position:relative; margin-bottom:20px;">
-  <button onclick="history.back()" 
-          style="
-            position:absolute;
-            left:0;
-            top:50%;
-            transform: translateY(-50%);
-            padding:8px 14px;
-            background:#ff8800;
-            color:#fff;
-            border:none;
-            border-radius:6px;
-            cursor:pointer;
-            font-size:0.9rem;
-            box-shadow:0 4px 10px rgba(0,0,0,0.1);
-            transition:0.2s;
-          "
-          onmouseover="this.style.background='#e67600'"
-          onmouseout="this.style.background='#ff8800'"
-  >
-    ← Back
-  </button>
-  <h1 style="text-align:center; font-size:1.8rem; margin:0;">Checkout</h1>
-</div>
-
-
-    <div id="order-summary" class="order-summary"></div>
-
-    <form id="checkout-form" class="checkout-form">
-      <div class="form-group"><label>Full Name</label><input required type="text" id="cust-name"/></div>
-      <div class="form-group"><label>Phone Number</label><input required type="tel" id="cust-phone"/></div>
-      <div class="form-group"><label>Email</label><input required type="email" id="cust-email"/></div>
-      <div class="form-group">
-        <label>Delivery Location</label>
-        <select id="cust-location" required onchange="toggleCustomLocation(this)">
-          <option value="">-- Select Location --</option>
-          <option>SAMCOM PROPERTIES AGENCY</option>
-          <option>WESTRN STEELMART</option>
-          <option>Pema Electronics</option>
-          <option>Beulah Hotel</option>
-          <option>Rawhew Ranch</option>
-          <option>Kinamba Centre</option>
-          <option>A.I.C. Kinamba (church)</option>
-          <option value="other">Other (Specify)</option>
-        </select>
-        <input type="text" id="custom-location" placeholder="Enter your location" style="display:none;margin-top:8px;"/>
-      </div>
-      <h3>Payment Method</h3>
-      <div class="form-group payment-options">
-        <label><input type="radio" name="payment" value="cod" checked/> Cash on Delivery</label>
-        <label><input type="radio" name="payment" value="mpesa"/> Pochi La Biashara</label>
-        <label><input type="radio" name="payment" value="card"/> Card (Demo)</label>
-      </div>
-      <button id="checkout-btn" class="btn primary" type="submit">Order Now</button>
-    </form>
-
-    <div id="checkout-result"></div>
-  </main>
-
-  <!-- Modal -->
-  <div class="modal-overlay" id="orderModal">
-    <div class="modal">
-      <h3>Send order via</h3>
-      <button class="btn-email">📧 Email</button>
-      <button class="btn-sms">💬 SMS</button>
-      <button class="btn-wa">🟢 WhatsApp</button>
-      <button class="btn-cancel">Cancel</button>
-    </div>
-  </div>
-
-  <footer class="footer">
+<header class="site-header">
   <div class="container">
-    <p>&copy; 2025 La Dosha Hotel. All Rights Reserved.</p>
-    <p>You Order We Deliver</p>
+    <div class="logo"><a href="index.html"><img src="assets/images/ladoshalogo.png" alt="La Dosha Hotel Logo"/></a></div>
+    <nav class="main-nav" id="navMenu">
+      <a href="index.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="explore.html">Explore</a>
+      <a href="about.html">About</a>
+      <a href="destinations.html">Destination</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
   </div>
+</header>
+
+<main>
+  <h2>Checkout</h2>
+  <div id="order-summary"></div>
+
+  <form id="checkout-form">
+    <div class="form-group">
+      <label for="cust-name">Full Name *</label>
+      <input type="text" id="cust-name" required>
+    </div>
+    <div class="form-group">
+      <label for="cust-phone">Phone Number *</label>
+      <input type="tel" id="cust-phone" required>
+    </div>
+    <div class="form-group">
+      <label for="cust-email">Email</label>
+      <input type="email" id="cust-email">
+    </div>
+    <div class="form-group">
+      <label>Delivery Location *</label>
+      <select id="cust-location" required onchange="toggleCustomLocation(this.value)">
+        <option value="">-- Select Location --</option>
+        <option>SAMCOM PROPERTIES AGENCY</option>
+        <option>WESTRN STEELMART</option>
+        <option>Pema Electronics</option>
+        <option>Beulah Hotel</option>
+        <option value="other">Other (Specify)</option>
+      </select>
+      <input type="text" id="custom-location" placeholder="Enter custom location" style="display:none;margin-top:8px;">
+    </div>
+    <div class="form-group">
+      <label>Payment Method *</label>
+      <div class="payment-options">
+        <label><input type="radio" name="payment" value="mpesa" required> M-Pesa</label>
+        <label><input type="radio" name="payment" value="cash"> Cash on Delivery</label>
+      </div>
+    </div>
+    <button class="btn primary" type="submit">Order Now</button>
+  </form>
+
+  <div id="checkout-result"></div>
+</main>
+
+<footer class="footer">
+  <p>&copy; 2025 La Dosha Hotel. All Rights Reserved.</p>
+  <p>You Order We Deliver</p>
 </footer>
 
-  <script src="js/cart.js"></script>
-  <script>
-    const summaryDiv = document.getElementById('order-summary');
-    const checkoutBtn = document.getElementById('checkout-btn');
-    const orderModal = document.getElementById('orderModal');
+<!-- Order Modal -->
+<div id="orderModal" class="modal">
+  <div class="modal-content">
+    <h3>Send Your Order</h3>
+    <button class="btn primary btn-wa">WhatsApp</button>
+    <button class="btn secondary btn-sms">SMS</button>
+    <button class="btn secondary btn-email">Email</button>
+    <button class="btn secondary btn-cancel">Cancel</button>
+  </div>
+</div>
 
-    function toggleCustomLocation(select) {
-      const customInput = document.getElementById('custom-location');
-      if (select.value === "other") { customInput.style.display="block"; customInput.required=true; }
-      else { customInput.style.display="none"; customInput.required=false; customInput.value=""; }
-    }
+<script>
+const menuToggle=document.querySelector('.menu-toggle');
+const navMenu=document.getElementById('navMenu');
+menuToggle.addEventListener('click',()=>navMenu.classList.toggle('active'));
 
-    function renderSummary() {
-      const items = getCartItems();
-      if (items.length === 0) { summaryDiv.innerHTML="<p>Your cart is empty.</p>"; return; }
-      let html = "<h3>Your Order</h3>";
-      items.forEach(item => {
-        html += `
-          <div class="order-item">
-            <img src="${item.img}" alt="${item.name}"/>
-            <div>
-              <strong>${item.name}</strong>
-              Qty: ${item.qty} × KES ${item.price}<br/>
-              ${item.note ? `<em>Note: ${item.note}</em><br/>` : ""}
-              <strong>KES ${item.qty * item.price}</strong>
-            </div>
-          </div>`;
-      });
-      html += `<p><strong>Total: KES ${getCartTotal()}</strong></p>`;
-      summaryDiv.innerHTML = html;
-    }
-    renderSummary(); updateCounts();
+function toggleCustomLocation(value){
+  document.getElementById("custom-location").style.display=(value==="other")?"block":"none";
+}
 
-    document.getElementById('checkout-form').addEventListener('submit', function(e){
-      e.preventDefault();
-      const name=document.getElementById('cust-name').value.trim();
-      const phone=document.getElementById('cust-phone').value.trim();
-      const email=document.getElementById('cust-email').value.trim();
-      let location=document.getElementById('cust-location').value;
-      if(location==="other"){ location=document.getElementById('custom-location').value.trim(); }
-      const payment=document.querySelector('input[name="payment"]:checked').value;
-      if(!name||!phone||!location){ alert("Please fill in all required fields."); return; }
+function getCartItems(){ return JSON.parse(localStorage.getItem('cart'))||[]; }
+function getCartTotal(){ 
+  return getCartItems().reduce((sum,it)=>sum+(it.price*it.qty),0).toFixed(2);
+}
 
-      const items=getCartItems();
-      const total=getCartTotal();
-      const orderTime=new Date().toLocaleString();
+function renderCheckoutSummary(){
+  const items=getCartItems();
+  const summary=document.getElementById("order-summary");
+  if(items.length===0){ summary.innerHTML="<p>Your cart is empty.</p>"; return; }
+  let html="<h3>Your Order</h3>";
+  items.forEach(it=>{
+    html+=`
+      <div class="order-item">
+        <img src="${it.img}" alt="${it.name}">
+        <div>
+          <strong>${it.name}</strong><br>
+          Qty: ${it.qty} × KES ${it.price}<br>
+          ${it.instruction ? `<em>Note: ${it.instruction}</em><br>` : ""}
+          <strong>KES ${(it.qty*it.price).toFixed(2)}</strong>
+        </div>
+      </div>
+    `;
+  });
+  html+=`<p><strong>Total: KES ${getCartTotal()}</strong></p>`;
+  summary.innerHTML=html;
+}
 
-      let message=`New Order - La Dosha Hotel%0A`;
-      message+=`Name: ${name}%0A`;
-      message+=`Phone: ${phone}%0A`;
-      message+=`Email: ${email}%0A`;
-      message+=`Location: ${location}%0A`;
-      message+=`Payment: ${payment}%0A`;
-      message+=`Time: ${orderTime}%0A`;
-      message+=`Total: KES ${total}%0AItems:%0A`;
-      items.forEach(it=>{
-        message+=`- ${it.name} x${it.qty} (KES ${it.qty*it.price})`;
-        if(it.note) message+=` | Note: ${it.note}`;
-        message+=`%0A`;
-      });
+// Refresh checkout if cart changes in another tab/page
+window.addEventListener("storage",(e)=>{ 
+  if(e.key==="cart"){ renderCheckoutSummary(); }
+});
 
-      orderModal.classList.add('show');
-      orderModal.querySelector('.btn-email').onclick=()=>{ window.location.href=`mailto:ladoshahotel@gmail.com?subject=New Order&body=${message}`; orderModal.classList.remove('show'); };
-      orderModal.querySelector('.btn-sms').onclick=()=>{ window.location.href=`sms:+254715665770?body=${message}`; orderModal.classList.remove('show'); };
-      orderModal.querySelector('.btn-wa').onclick=()=>{ window.open(`https://wa.me/254715665770?text=${message}`,'_blank'); orderModal.classList.remove('show'); };
-      orderModal.querySelector('.btn-cancel').onclick=()=>orderModal.classList.remove('show');
+document.getElementById("checkout-form").addEventListener("submit",function(e){
+  e.preventDefault();
+  const name=document.getElementById('cust-name').value.trim();
+  const phone=document.getElementById('cust-phone').value.trim();
+  const email=document.getElementById('cust-email').value.trim();
+  let location=document.getElementById('cust-location').value;
+  if(location==="other"){ location=document.getElementById('custom-location').value.trim(); }
+  const payment=document.querySelector('input[name="payment"]:checked').value;
 
-      document.getElementById('checkout-result').innerHTML=`
-        <div class="card">
-          <h3>🎉 Thank you, ${name}!</h3>
-          <p>Your order total is <strong>KES ${total}</strong>.</p>
-          <p>Payment Method: <strong>${payment.toUpperCase()}</strong></p>
-          <p>We’ll contact you at <strong>${phone}</strong> to deliver to <strong>${location}</strong>.</p>
-          <a href="index.html" class="btn secondary">Go Home</a>
-        </div>`;
-      clearCart(); renderSummary(); updateCounts();
-    });
-  </script>
+  const items=getCartItems();
+  const total=getCartTotal();
+  const orderTime=new Date().toLocaleString();
 
-  <!-- Your other scripts -->
-  <script src="js/cart.js"></script>
+  let message=`New Order - La Dosha Hotel%0A`;
+  message+=`Name: ${name}%0A`;
+  message+=`Phone: ${phone}%0A`;
+  if(email) message+=`Email: ${email}%0A`;
+  message+=`Location: ${location}%0A`;
+  message+=`Payment: ${payment}%0A`;
+  message+=`Time: ${orderTime}%0A`;
+  message+=`Total: KES ${total}%0AItems:%0A`;
+  items.forEach(it=>{
+    message+=`- ${it.name} x${it.qty} (KES ${it.qty*it.price})`;
+    if(it.instruction) message+=` | Note: ${it.instruction}`;
+    message+=`%0A`;
+  });
 
-  <!-- Service Worker registration -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js')
-        .then(() => console.log('Service Worker registered'));
-    }
-  </script>
-</body>
-</html>
+  const orderModal=document.getElementById('orderModal');
+  orderModal.style.display="flex";
+  orderModal.querySelector('.btn-email').onclick=()=>{ window.location.href=`mailto:ladoshahotel@gmail.com?subject=New Order&body=${message}`; orderModal.style.display="none"; };
+  orderModal.querySelector('.btn-sms').onclick=()=>{ window.location.href=`sms:+254715665770?body=${message}`; orderModal.style.display="none"; };
+  orderModal.querySelector('.btn-wa').onclick=()=>{ window.open(`https://wa.me/254715665770?text=${message}`,'_blank'); orderModal.style.display="none"; };
+  orderModal.querySelector('.btn-cancel').onclick=()=>orderModal.style.display="none";
+
+  document.getElementById('checkout-result').innerHTML=`
+    <div class="card">
+      <h3>🎉 Thank you, ${name}!</h3>
+      <p>Your order total is <strong>KES ${total}</strong>.</p>
+      <p>Payment Method: <strong>${payment.toUpperCase()}</strong></p>
+      <p>We’ll contact you at <strong>${phone}</strong> to deliver to <strong>${location}</strong>.</p>
+      <a href="index.html" class="btn secondary">Go Home</a>
+    </div>`;
+  localStorage.removeItem('cart');
+  renderCheckoutSummary(); // clear summary after placing order
+});
+
+document.addEventListener("DOMContentLoaded",renderCheckoutSummary);
+</script>
+
 </body>
 </html>
