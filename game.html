@@ -42,6 +42,40 @@
     .menu-toggle span { height: 3px; background: #333; border-radius: 2px; margin-bottom: 4px; }
     .main-nav.active { display: flex; flex-direction: column; gap: 10px; position: absolute; top: 60px; right: 20px; background: #fff; padding: 15px 20px; border-radius: 10px; }
 
+    /* Hamburger */
+  .menu-toggle {
+    display: none;
+    flex-direction: column; justify-content: space-between;
+    width: 25px; height: 18px;
+    background: none; border: none; cursor: pointer;
+  }
+  .menu-toggle span {
+    display: block;
+    height: 3px; background: #333; border-radius: 2px;
+  }
+
+  /* Mobile Menu (animated) */
+  @media (max-width: 768px) {
+    .main-nav {
+      display: flex;
+      flex-direction: column;
+      position: absolute; top: 60px; right: 20px;
+      background: #fff;
+      padding: 15px 20px;
+      border-radius: 10px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+      opacity: 0;
+      transform: translateY(-15px);
+      pointer-events: none;
+      transition: all 0.3s ease;
+    }
+    .main-nav.active {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .menu-toggle { display: flex; }
+  }
     /* ===== Spin Wheel ===== */
     .wheel-container {
       position: relative;
@@ -306,7 +340,7 @@
     showJoinPopup(span.textContent);
   }
   for(let i=0;i<5;i++) addPlayer();
-  setInterval(addPlayer,7000);
+  setInterval(addPlayer,10000);
 
   function showJoinPopup(msg){
     const joinPopup=document.getElementById("joinPopup");
@@ -323,7 +357,7 @@
     popSound.play();
     setTimeout(()=>{ popup.style.display="none"; },4000);
   }
-  setInterval(showWinner,12000);
+  setInterval(showWinner,14000);
 </script>
 </body>
 </html>
